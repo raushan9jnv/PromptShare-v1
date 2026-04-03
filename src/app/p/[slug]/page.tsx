@@ -54,6 +54,9 @@ export default async function PromptPage({ params }: { params: Promise<{ slug: s
         </div>
 
         <h1 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950">{prompt.title}</h1>
+        {prompt.authorHandle ? (
+          <div className="mt-1 text-sm text-zinc-500">@{prompt.authorHandle}</div>
+        ) : null}
         <p className="mt-2 text-sm leading-6 text-zinc-600">
           {prompt.excerpt?.trim() || prompt.body.replace(/\s+/g, " ").trim().slice(0, 240)}
         </p>

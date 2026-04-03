@@ -45,6 +45,16 @@ function safeFileName(name: string) {
   return name.replace(/[^\w.\-]+/g, "_").slice(0, 120);
 }
 
+function defaultAuthorHandleFromEmail(email: string | null | undefined) {
+  const raw = (email ?? "").split("@")[0] ?? "";
+  return raw
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 24);
+}
+
 export async function createPrompt(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const {
@@ -85,6 +95,7 @@ export async function createPrompt(formData: FormData) {
     .map((t) => t.trim().toLowerCase())
     .filter(Boolean)
     .slice(0, 20);
+  const author_handle = defaultAuthorHandleFromEmail(user.email) || "user";
   const excerpt = excerptFromBody(body);
   const slug = makeSlug(title);
 
@@ -99,6 +110,7 @@ export async function createPrompt(formData: FormData) {
       title,
       body,
       excerpt,
+      author_handle,
       category_slug: category_slugs[0],
       model_slug: model_slugs[0],
       category_slugs,

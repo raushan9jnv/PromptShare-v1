@@ -10,6 +10,7 @@ export type PromptRow = {
   title: string;
   body: string;
   excerpt: string | null;
+  author_handle?: string | null;
   category_slug: string;
   model_slug: string;
   category_slugs?: string[] | null;
@@ -33,6 +34,7 @@ export type PromptListItem = {
   title: string;
   excerpt: string | null;
   body: string;
+  authorHandle: string | null;
   categorySlugs: string[];
   modelSlugs: string[];
   tags: string[];
@@ -72,6 +74,7 @@ function mapListRow(
     title: row.title,
     excerpt: row.excerpt,
     body: row.body,
+    authorHandle: row.author_handle ?? null,
     categorySlugs,
     modelSlugs,
     tags,
@@ -92,6 +95,7 @@ export async function listPromptsTrending(limit = 30): Promise<PromptListItem[]>
       title,
       body,
       excerpt,
+      author_handle,
       category_slug,
       model_slug,
       category_slugs,
@@ -121,6 +125,7 @@ export async function listPromptsByCategory(categorySlug: string): Promise<Promp
       title,
       body,
       excerpt,
+      author_handle,
       category_slug,
       model_slug,
       category_slugs,
@@ -150,6 +155,7 @@ export async function listPromptsByModel(modelSlug: string): Promise<PromptListI
       title,
       body,
       excerpt,
+      author_handle,
       category_slug,
       model_slug,
       category_slugs,
@@ -179,6 +185,7 @@ export async function listPromptsByContentType(type: ContentTypeSlug): Promise<P
       title,
       body,
       excerpt,
+      author_handle,
       category_slug,
       model_slug,
       category_slugs,
@@ -212,6 +219,7 @@ export async function searchPrompts(query: string): Promise<PromptListItem[]> {
       title,
       body,
       excerpt,
+      author_handle,
       category_slug,
       model_slug,
       category_slugs,
@@ -256,6 +264,7 @@ export async function getPromptBySlug(slug: string): Promise<PromptDetail | null
       title,
       body,
       excerpt,
+      author_handle,
       category_slug,
       model_slug,
       category_slugs,

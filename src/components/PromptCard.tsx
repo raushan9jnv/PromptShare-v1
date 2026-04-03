@@ -65,13 +65,21 @@ export function PromptCard({ prompt }: { prompt: PromptListItem }) {
           ))}
         </div>
 
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <Link
+              href={`/p/${prompt.slug}`}
+              className="text-lg font-semibold tracking-tight text-zinc-950"
+            >
+              {prompt.title}
+            </Link>
+            {prompt.authorHandle ? (
+              <div className="mt-1 text-xs text-zinc-500">@{prompt.authorHandle}</div>
+            ) : null}
+          </div>
+        </div>
+
         <div className="mt-3">
-          <Link
-            href={`/p/${prompt.slug}`}
-            className="text-lg font-semibold tracking-tight text-zinc-950"
-          >
-            {prompt.title}
-          </Link>
           <p className="mt-2 text-sm leading-6 text-zinc-600">{blurb}</p>
         </div>
 
