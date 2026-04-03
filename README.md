@@ -22,20 +22,22 @@ Prompt sharing website (Next.js + Supabase) where users can:
 - **Search**: `/search?q=...` (full-text + fallback search)
 - **No AI generation**: only stores text + user uploaded media
  
- Main Page
- ![alt text](<Screenshot (8).png>)
+## Screenshots (UI tracking)
 
- CREATE TAB WORKING
- ![alt text](<Screenshot (9).png>)
+### Main Page
+![Main Page](docs/screenshots/Screenshot%20(8).png)
 
- SEARCH WORKING
- ![alt text](<Screenshot 2026-04-03 175200.png>)
+### Create Tab Working
+![Create Tab Working](docs/screenshots/Screenshot%20(9).png)
 
- SIGN UP WORKING 
- ![alt text](<Screenshot (10).png>)
+### Search Working
+![Search Working](docs/screenshots/Screenshot%202026-04-03%20175200.png)
 
- SIGN IN WORKING
- ![alt text](<Screenshot (11).png>)
+### Sign Up Working
+![Sign Up Working](docs/screenshots/Screenshot%20(10).png)
+
+### Sign In Working
+![Sign In Working](docs/screenshots/Screenshot%20(11).png)
 
 
 ## Tech stack
