@@ -21,17 +21,22 @@ Prompt sharing website (Next.js + Supabase) where users can:
   - Prompt detail: `/p/[slug]` with copy button + media showcase
 - **Search**: `/search?q=...` (full-text + fallback search)
 - **No AI generation**: only stores text + user uploaded media
+ 
+ Main Page
+ ![alt text](<Screenshot (8).png>)
 
-![alt text](image.png)
+ CREATE TAB WORKING
+ ![alt text](<Screenshot (9).png>)
 
-![alt text](image-1.png)
+ SEARCH WORKING
+ ![alt text](<Screenshot 2026-04-03 175200.png>)
 
-SEARCH Working
-![alt text](image-4.png)
+ SIGN UP WORKING 
+ ![alt text](<Screenshot (10).png>)
 
-![alt text](image-3.png)
+ SIGN IN WORKING
+ ![alt text](<Screenshot (11).png>)
 
-![alt text](image-2.png)
 
 ## Tech stack
 - **Next.js (App Router) + TypeScript + Tailwind**
