@@ -1,0 +1,121 @@
+---
+title: "Prompt Engineering 101 — The Complete Beginner's Guide"
+description: "Learn the fundamentals of prompt engineering. From zero-shot to few-shot, system prompts to temperature settings — everything you need to start writing better prompts."
+date: "2026-04-02"
+author: "PromptShare Team"
+topic: "prompt-engineering"
+coverImage: "/blog/prompt-engineering-101.jpg"
+---
+
+Prompt engineering is the practice of crafting inputs to AI models that produce **better, more reliable outputs**. Whether you're using ChatGPT, Claude, Gemini, or any other LLM, the quality of your prompt directly determines the quality of the response.
+
+## Why Prompt Engineering Matters
+
+The difference between a mediocre prompt and a well-crafted one is **dramatic**. Consider these two approaches:
+
+```text
+Bad:  "Write me a blog post about AI"
+Good: "Write a 500-word blog post for a tech-savvy audience about how 
+       small businesses can use AI chatbots to improve customer support. 
+       Include 3 specific examples and a practical getting-started section."
+```
+
+The second prompt gives the model **context**, **constraints**, and **structure** — three pillars of effective prompt engineering.
+
+## The Core Framework: RICE
+
+We recommend the **RICE** framework for structuring prompts:
+
+- **R**ole — Tell the AI who it should be
+- **I**nstructions — What exactly to do
+- **C**ontext — Background information
+- **E**xample — Show what good output looks like
+
+### Role
+
+Setting a role primes the model's behavior:
+
+```text
+You are a senior copywriter at a Fortune 500 company with 15 years of 
+experience in B2B SaaS marketing.
+```
+
+### Instructions
+
+Be specific about format, length, and tone:
+
+```text
+Write 5 LinkedIn post ideas. Each should be under 200 words, use a 
+conversational tone, and end with a question to drive engagement.
+```
+
+### Context
+
+Give the model information it needs:
+
+```text
+Our company sells project management software to remote teams. Our 
+target audience is engineering managers at mid-size startups (50-200 
+employees). Our brand voice is professional but approachable.
+```
+
+### Example
+
+Show, don't just tell:
+
+```text
+Here's an example of our preferred style:
+"Remote standup meetings don't have to feel like a chore. Here's how 
+we turned our daily 15-minute sync into the most productive meeting 
+of the day..."
+```
+
+## Temperature and Top-P
+
+Two key parameters affect output randomness:
+
+| Parameter | Low Value | High Value |
+|-----------|-----------|------------|
+| **Temperature** (0-2) | Focused, deterministic | Creative, varied |
+| **Top-P** (0-1) | Conservative word choices | Diverse vocabulary |
+
+> **Tip:** For factual tasks (code, data extraction), use temperature 0-0.3. For creative tasks (brainstorming, copywriting), try 0.7-1.0.
+
+## Zero-Shot vs Few-Shot
+
+**Zero-shot** means giving instructions without examples:
+
+```text
+Classify this review as positive, negative, or neutral:
+"The battery life is amazing but the screen could be brighter."
+```
+
+**Few-shot** means providing examples first:
+
+```text
+Classify reviews as positive, negative, or neutral.
+
+Review: "Love this product!" → positive
+Review: "Worst purchase ever." → negative  
+Review: "It's okay, nothing special." → neutral
+
+Review: "The battery life is amazing but the screen could be brighter." →
+```
+
+Few-shot prompting typically improves accuracy by **15-30%** for classification tasks.
+
+## Common Mistakes
+
+1. **Being too vague** — "Make it better" tells the model nothing
+2. **Overloading** — Trying to do 10 things in one prompt
+3. **No format specification** — Not telling the model HOW to respond
+4. **Ignoring iteration** — Treating prompting as one-shot instead of a conversation
+
+## What's Next
+
+In upcoming posts, we'll dive deeper into:
+- Chain-of-thought prompting for complex reasoning
+- Model-specific techniques for ChatGPT vs Claude vs Gemini
+- Building prompt templates for your team
+
+Start practicing with the RICE framework today, and you'll see immediate improvements in your AI outputs.
