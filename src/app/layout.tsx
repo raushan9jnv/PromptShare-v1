@@ -1,10 +1,12 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
+
 import { Header } from "@/components/Header";
 import { SidebarWrapper } from "@/components/SidebarWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { appConfig } from "@/lib/config";
+
+import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL(appConfig.siteUrl),
   title: {
     default: appConfig.name,
     template: `%s · ${appConfig.name}`,
@@ -35,6 +37,12 @@ export const metadata: Metadata = {
     title: appConfig.name,
     description: appConfig.description,
     type: "website",
+    url: appConfig.siteUrl,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: appConfig.name,
+    description: appConfig.description,
   },
 };
 
@@ -49,7 +57,6 @@ export default function RootLayout({
       className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      {/* Inline script to prevent dark-mode flash */}
       <head>
         <script
           dangerouslySetInnerHTML={{

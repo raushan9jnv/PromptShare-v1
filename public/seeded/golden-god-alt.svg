@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#130C08"/>
+  <rect x="70" y="70" width="1060" height="760" rx="34" fill="url(#g)"/>
+  <circle cx="420" cy="355" r="170" fill="#D8A552" opacity="0.88"/>
+  <circle cx="430" cy="322" r="68" fill="#FFE6A8"/>
+  <rect x="320" y="420" width="225" height="205" rx="100" fill="#C2833A"/>
+  <text x="690" y="430" fill="#FFF8DD" font-size="74" font-family="Georgia, serif">ALT</text>
+  <text x="690" y="508" fill="#F7C57C" font-size="42" font-family="Arial, sans-serif">celestial throne version</text>
+  <defs><linearGradient id="g" x1="70" y1="70" x2="1130" y2="830"><stop stop-color="#60411B"/><stop offset="1" stop-color="#20110A"/></linearGradient></defs>
+</svg>

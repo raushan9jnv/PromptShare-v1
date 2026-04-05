@@ -1,0 +1,18 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#35241D"/>
+  <rect x="80" y="80" width="1040" height="740" rx="32" fill="url(#g)"/>
+  <circle cx="420" cy="370" r="170" fill="#7F5B4F" opacity="0.7"/>
+  <circle cx="430" cy="335" r="66" fill="#B28B7C"/>
+  <rect x="325" y="420" width="210" height="190" rx="90" fill="#9F7262"/>
+  <rect x="710" y="180" width="280" height="40" rx="20" fill="#F6D3BD" opacity="0.7"/>
+  <rect x="710" y="250" width="220" height="24" rx="12" fill="#F6D3BD" opacity="0.35"/>
+  <rect x="710" y="300" width="250" height="24" rx="12" fill="#F6D3BD" opacity="0.35"/>
+  <text x="710" y="440" fill="#FFF3EA" font-size="72" font-family="Georgia, serif">INPUT</text>
+  <text x="710" y="520" fill="#F4C0A1" font-size="44" font-family="Arial, sans-serif">old 1980 portrait</text>
+  <defs>
+    <linearGradient id="g" x1="80" y1="80" x2="1120" y2="820" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5A3C31"/>
+      <stop offset="1" stop-color="#241713"/>
+    </linearGradient>
+  </defs>
+</svg>

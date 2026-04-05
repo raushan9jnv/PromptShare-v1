@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" rx="40" fill="#12161B"/>
+  <rect x="70" y="70" width="1460" height="760" rx="32" fill="url(#g)"/>
+  <path d="M350 560C470 340 590 240 760 220C930 200 1060 260 1220 420" stroke="#FFF0E2" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="350" cy="560" r="46" fill="#FFB067"/>
+  <circle cx="760" cy="220" r="46" fill="#FFD7B5"/>
+  <circle cx="1220" cy="420" r="46" fill="#F26A34"/>
+  <text x="130" y="700" fill="#EEF6FF" font-size="84" font-family="Georgia, serif">Chain of Thought Prompting</text>
+  <defs><linearGradient id="g" x1="70" y1="70" x2="1530" y2="830"><stop stop-color="#203047"/><stop offset="1" stop-color="#12161B"/></linearGradient></defs>
+</svg>

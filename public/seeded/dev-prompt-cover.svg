@@ -1,0 +1,9 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#12161B"/>
+  <rect x="80" y="80" width="1040" height="740" rx="32" fill="#18232D"/>
+  <rect x="140" y="160" width="920" height="90" rx="24" fill="#29455B"/>
+  <rect x="140" y="300" width="500" height="48" rx="14" fill="#7CC6FF" opacity="0.85"/>
+  <rect x="140" y="390" width="620" height="48" rx="14" fill="#7CC6FF" opacity="0.65"/>
+  <rect x="140" y="480" width="560" height="48" rx="14" fill="#7CC6FF" opacity="0.5"/>
+  <text x="140" y="700" fill="#ECF6FF" font-size="68" font-family="Georgia, serif">DEBUG PLAYBOOK</text>
+</svg>

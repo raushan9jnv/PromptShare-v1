@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#201A17"/>
+  <rect x="70" y="70" width="1060" height="760" rx="34" fill="url(#g)"/>
+  <circle cx="430" cy="360" r="165" fill="#836763"/>
+  <circle cx="435" cy="330" r="68" fill="#B6948F"/>
+  <rect x="330" y="420" width="210" height="190" rx="96" fill="#9E7E78"/>
+  <text x="708" y="430" fill="#FFF8F2" font-size="74" font-family="Georgia, serif">INPUT</text>
+  <text x="708" y="508" fill="#D8B09A" font-size="44" font-family="Arial, sans-serif">portrait source image</text>
+  <defs><linearGradient id="g" x1="70" y1="70" x2="1130" y2="830"><stop stop-color="#403230"/><stop offset="1" stop-color="#16110F"/></linearGradient></defs>
+</svg>

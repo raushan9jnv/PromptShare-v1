@@ -1,0 +1,9 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#171411"/>
+  <rect x="90" y="90" width="1020" height="720" rx="34" fill="#FFF7ED"/>
+  <rect x="170" y="180" width="760" height="80" rx="24" fill="#FFB067"/>
+  <rect x="170" y="320" width="680" height="42" rx="14" fill="#E7D5BE"/>
+  <rect x="170" y="400" width="740" height="42" rx="14" fill="#E7D5BE"/>
+  <rect x="170" y="480" width="620" height="42" rx="14" fill="#E7D5BE"/>
+  <text x="170" y="670" fill="#392315" font-size="68" font-family="Georgia, serif">UPSC FRAMEWORK</text>
+</svg>

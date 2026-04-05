@@ -1,0 +1,9 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#261514"/>
+  <rect x="70" y="70" width="1060" height="760" rx="34" fill="url(#g)"/>
+  <rect x="150" y="150" width="900" height="120" rx="32" fill="#FFB067"/>
+  <rect x="150" y="320" width="760" height="86" rx="28" fill="#FFF2E2"/>
+  <rect x="150" y="450" width="820" height="86" rx="28" fill="#FFD1AF"/>
+  <rect x="150" y="580" width="700" height="86" rx="28" fill="#FFF2E2"/>
+  <text x="170" y="228" fill="#381C12" font-size="60" font-family="Georgia, serif">REEL HOOKS</text>
+</svg>

@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#161313"/>
+  <rect x="70" y="70" width="1060" height="760" rx="34" fill="#261D1C"/>
+  <rect x="130" y="140" width="420" height="620" rx="30" fill="#FFB066"/>
+  <circle cx="340" cy="340" r="120" fill="#2B1812" opacity="0.45"/>
+  <rect x="620" y="180" width="430" height="90" rx="28" fill="#FFF2E0"/>
+  <rect x="620" y="320" width="360" height="56" rx="18" fill="#FFD7B5"/>
+  <rect x="620" y="410" width="390" height="56" rx="18" fill="#FFD7B5"/>
+  <text x="620" y="600" fill="#FFF8F2" font-size="70" font-family="Georgia, serif">THUMBNAIL</text>
+</svg>

@@ -1,0 +1,11 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" rx="40" fill="#1A120E"/>
+  <rect x="70" y="70" width="1460" height="760" rx="32" fill="url(#g)"/>
+  <rect x="130" y="150" width="660" height="110" rx="28" fill="#FFB067"/>
+  <rect x="130" y="310" width="560" height="56" rx="18" fill="#FFF0E2"/>
+  <rect x="130" y="400" width="610" height="56" rx="18" fill="#FFD7B5"/>
+  <circle cx="1160" cy="360" r="170" fill="#F26A34" opacity="0.28"/>
+  <circle cx="1080" cy="320" r="120" fill="#FFE7C5" opacity="0.22"/>
+  <text x="130" y="700" fill="#FFF7F0" font-size="84" font-family="Georgia, serif">Prompt Engineering 101</text>
+  <defs><linearGradient id="g" x1="70" y1="70" x2="1530" y2="830"><stop stop-color="#5B3624"/><stop offset="1" stop-color="#171211"/></linearGradient></defs>
+</svg>

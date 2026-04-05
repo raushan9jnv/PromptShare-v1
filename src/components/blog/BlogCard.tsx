@@ -1,65 +1,36 @@
-"use client";
+﻿"use client";
 
 /* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
-import type { BlogPost } from "@/lib/blog/types";
+
 import { getTopicBySlug } from "@/lib/blog/topics";
+import type { BlogPost } from "@/lib/blog/types";
 
 export function BlogCard({ post }: { post: BlogPost }) {
   const topic = getTopicBySlug(post.topic);
 
   return (
-    <Link
-      href={`/blog/${post.slug}`}
-      className="group block rounded-xl border border-border-default bg-surface-card overflow-hidden transition-all duration-200 hover:border-content-muted hover:shadow-md"
-    >
-      {/* Cover image */}
-      {post.coverImage ? (
-        <div className="aspect-[16/9] bg-surface-secondary overflow-hidden">
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-          />
-        </div>
-      ) : (
-        <div className="aspect-[16/9] bg-gradient-to-br from-accent-500/10 to-accent-600/5 flex items-center justify-center">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-content-muted">
-            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="16" y1="13" x2="8" y2="13" />
-            <line x1="16" y1="17" x2="8" y2="17" />
-            <line x1="10" y1="9" x2="8" y2="9" />
-          </svg>
-        </div>
-      )}
+    <Link href={`/blog/${post.slug}`} className="group block overflow-hidden rounded-[28px] border border-border-default/80 bg-surface-card shadow-[0_18px_50px_-36px_rgba(15,23,42,0.22)] transition-all duration-200 hover:-translate-y-1 hover:border-accent-300">
+      <div className="aspect-[16/9] overflow-hidden bg-surface-secondary">
+        <img
+          src={post.coverImage ?? "/blog/prompt-engineering-101.svg"}
+          alt={post.title}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          onError={(event) => {
+            (event.target as HTMLImageElement).src = "/blog/prompt-engineering-101.svg";
+          }}
+        />
+      </div>
 
       <div className="p-5">
-        {/* Meta row */}
-        <div className="flex items-center gap-3 text-xs text-content-muted mb-3">
-          <time dateTime={post.date}>
-            {new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-          </time>
-          {topic ? (
-            <span className="rounded-full bg-surface-secondary px-2.5 py-0.5 font-medium text-content-secondary">
-              {topic.name}
-            </span>
-          ) : null}
+        <div className="mb-3 flex items-center gap-3 text-xs text-content-muted">
+          <time dateTime={post.date}>{new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</time>
+          {topic ? <span className="rounded-full bg-surface-secondary px-2.5 py-0.5 font-medium text-content-secondary">{topic.name}</span> : null}
         </div>
 
-        {/* Title */}
-        <h3 className="text-base font-semibold text-content-primary leading-snug group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
-          {post.title}
-        </h3>
-
-        {/* Description */}
-        <p className="mt-2 text-sm text-content-secondary line-clamp-2 leading-relaxed">
-          {post.description}
-        </p>
-
-        {/* Footer */}
+        <h3 className="text-lg font-semibold leading-snug text-content-primary transition-colors group-hover:text-accent-600 dark:group-hover:text-accent-400">{post.title}</h3>
+        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-content-secondary">{post.description}</p>
         <div className="mt-4 flex items-center justify-between text-xs text-content-muted">
           <span>{post.author}</span>
           <span>{post.readTime} min read</span>

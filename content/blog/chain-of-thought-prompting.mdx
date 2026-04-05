@@ -1,13 +1,13 @@
----
-title: "Chain-of-Thought Prompting — Make AI Think Step by Step"
-description: "Chain-of-thought prompting unlocks dramatically better reasoning from AI models. Learn the technique, when to use it, and see real examples that improve accuracy by 40%+."
+﻿---
+title: "Chain-of-Thought Prompting: Make AI Think Step by Step"
+description: "Chain-of-thought prompting unlocks stronger reasoning from AI models. Learn when to use it and how to apply it in practical prompts."
 date: "2026-03-28"
 author: "PromptShare Team"
 topic: "advanced-techniques"
-coverImage: "/blog/chain-of-thought.jpg"
+coverImage: "/blog/chain-of-thought-prompting.svg"
 ---
 
-Chain-of-thought (CoT) prompting is one of the most powerful techniques in prompt engineering. By asking the model to **show its reasoning**, you can dramatically improve accuracy on complex tasks — often by **40% or more**.
+Chain-of-thought (CoT) prompting is one of the most powerful techniques in prompt engineering. By asking the model to **show its reasoning**, you can dramatically improve accuracy on complex tasks - often by **40% or more**.
 
 ## What Is Chain-of-Thought Prompting?
 
@@ -16,7 +16,7 @@ Instead of asking for a direct answer, you instruct the model to think through t
 ### Without CoT (Standard Prompting)
 
 ```text
-Q: A store has 25 apples. They sell 13, then receive a shipment of 
+Q: A store has 25 apples. They sell 13, then receive a shipment of
    30 more. They give away 8 to employees. How many apples do they have?
 A: 34
 ```
@@ -24,7 +24,7 @@ A: 34
 ### With CoT
 
 ```text
-Q: A store has 25 apples. They sell 13, then receive a shipment of 
+Q: A store has 25 apples. They sell 13, then receive a shipment of
    30 more. They give away 8 to employees. How many apples do they have?
 
 Let me work through this step by step:
@@ -42,13 +42,13 @@ While both get the right answer here, CoT becomes critical for harder problems w
 
 ### 1. Zero-Shot CoT
 
-The simplest form — just add **"Let's think step by step"** to your prompt:
+The simplest form - just add **"Let's think step by step"** to your prompt:
 
 ```text
-Determine whether this argument is logically valid. 
+Determine whether this argument is logically valid.
 Let's think step by step.
 
-"All cats are mammals. Some mammals are pets. 
+"All cats are mammals. Some mammals are pets.
 Therefore, all cats are pets."
 ```
 
@@ -60,13 +60,13 @@ Provide examples of reasoning chains:
 
 ```text
 Q: Is 127 a prime number?
-A: Let me check. I need to test divisibility by primes up to √127 ≈ 11.3.
-   127 ÷ 2 = 63.5 (not divisible)
-   127 ÷ 3 = 42.3 (not divisible)
-   127 ÷ 5 = 25.4 (not divisible)
-   127 ÷ 7 = 18.1 (not divisible)
-   127 ÷ 11 = 11.5 (not divisible)
-   Since 127 isn't divisible by any prime ≤ 11, it is prime. ✓
+A: Let me check. I need to test divisibility by primes up to sqrt(127) ~= 11.3.
+   127 / 2 = 63.5 (not divisible)
+   127 / 3 = 42.3 (not divisible)
+   127 / 5 = 25.4 (not divisible)
+   127 / 7 = 18.1 (not divisible)
+   127 / 11 = 11.5 (not divisible)
+   Since 127 is not divisible by any prime <= 11, it is prime. Yes.
 
 Q: Is 91 a prime number?
 A:
@@ -77,10 +77,10 @@ A:
 Generate **multiple reasoning paths** and take the majority answer:
 
 ```text
-Solve this problem 3 different ways, then give me the answer that 
+Solve this problem 3 different ways, then give me the answer that
 appears most frequently:
 
-"If a train travels 120km in 1.5 hours, and then 80km in 1 hour, 
+"If a train travels 120km in 1.5 hours, and then 80km in 1 hour,
 what is its average speed for the entire journey?"
 ```
 
@@ -101,7 +101,7 @@ what is its average speed for the entire journey?"
 Tree-of-Thought (ToT) extends CoT by exploring **multiple reasoning branches**:
 
 ```text
-Consider 3 different approaches to solve this problem. 
+Consider 3 different approaches to solve this problem.
 For each approach:
 1. Describe the strategy
 2. Work through it step by step
@@ -109,21 +109,21 @@ For each approach:
 
 Then select the best approach and explain why.
 
-Problem: Design a database schema for a social media app that needs 
-to support posts, comments, likes, and follower relationships while 
+Problem: Design a database schema for a social media app that needs
+to support posts, comments, likes, and follower relationships while
 optimizing for read-heavy workloads.
 ```
 
 ## Practical Tips
 
 1. **"Think step by step"** works across all major models
-2. **Longer reasoning ≠ better** — encourage concise, focused steps
-3. **Combine with role-setting** — "You are a careful mathematician. Think through each step..."
-4. **Use for verification** — "Check your answer by working backwards"
-5. **Format the output** — "Show your reasoning in numbered steps, then give the final answer on its own line"
+2. **Longer reasoning is not always better** - encourage concise, focused steps
+3. **Combine with role-setting** - "You are a careful mathematician. Think through each step..."
+4. **Use for verification** - "Check your answer by working backwards"
+5. **Format the output** - "Show your reasoning in numbered steps, then give the final answer on its own line"
 
 ## Key Takeaway
 
-Chain-of-thought prompting is not just a trick — it fundamentally changes how the model processes your request. By making reasoning explicit, you give the model a **scratchpad** that reduces errors and improves complex problem-solving.
+Chain-of-thought prompting is not just a trick - it fundamentally changes how the model processes your request. By making reasoning explicit, you give the model a **scratchpad** that reduces errors and improves complex problem-solving.
 
 Start adding "Let's think step by step" to your harder prompts today. The improvement will be immediate and measurable.

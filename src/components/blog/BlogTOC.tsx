@@ -1,14 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { BlogHeading } from "@/lib/blog/headings";
 
-interface TOCItem {
-  id: string;
-  text: string;
-  level: number;
-}
-
-export function BlogTOC({ headings }: { headings: TOCItem[] }) {
+export function BlogTOC({ headings }: { headings: BlogHeading[] }) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
@@ -59,20 +54,4 @@ export function BlogTOC({ headings }: { headings: TOCItem[] }) {
       </ul>
     </nav>
   );
-}
-
-/** Parse headings from MDX content string for TOC */
-export function extractHeadings(content: string): TOCItem[] {
-  const regex = /^(#{2,3})\s+(.+)$/gm;
-  const headings: TOCItem[] = [];
-  let match;
-
-  while ((match = regex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
-    const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    headings.push({ id, text, level });
-  }
-
-  return headings;
 }

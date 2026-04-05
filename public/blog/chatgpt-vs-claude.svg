@@ -1,0 +1,8 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" rx="40" fill="#161313"/>
+  <rect x="70" y="70" width="1460" height="760" rx="32" fill="url(#g)"/>
+  <circle cx="470" cy="360" r="150" fill="#10A37F" opacity="0.8"/>
+  <circle cx="860" cy="360" r="150" fill="#D97757" opacity="0.82"/>
+  <text x="130" y="690" fill="#FFF7F0" font-size="84" font-family="Georgia, serif">ChatGPT vs Claude</text>
+  <defs><linearGradient id="g" x1="70" y1="70" x2="1530" y2="830"><stop stop-color="#2B1E1A"/><stop offset="1" stop-color="#131313"/></linearGradient></defs>
+</svg>

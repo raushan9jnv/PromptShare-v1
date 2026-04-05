@@ -1,5 +1,9 @@
 # PromptShare (v1)
 
+## Main product/design guide
+- [Creator Vault Product Guide](docs/creator-vault-product-guide.md)
+- [V2 Changes](docs/v2-changes.md)
+
 Prompt sharing website (Next.js + Supabase) where users can:
 - Sign up / sign in
 - Submit prompts (text) with media uploads (images/video/audio) **uploaded by users**

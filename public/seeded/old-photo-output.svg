@@ -1,0 +1,17 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#1F140F"/>
+  <rect x="70" y="70" width="1060" height="760" rx="34" fill="url(#g)"/>
+  <circle cx="425" cy="360" r="172" fill="#D3A98E" opacity="0.92"/>
+  <circle cx="432" cy="322" r="70" fill="#F4D6C4"/>
+  <rect x="318" y="418" width="225" height="198" rx="98" fill="#E9C0AA"/>
+  <circle cx="770" cy="190" r="70" fill="#FFB067" opacity="0.35"/>
+  <circle cx="865" cy="240" r="110" fill="#F26A34" opacity="0.25"/>
+  <text x="708" y="430" fill="#FFF8F2" font-size="74" font-family="Georgia, serif">OUTPUT</text>
+  <text x="708" y="508" fill="#FBC49D" font-size="44" font-family="Arial, sans-serif">restored cinematic portrait</text>
+  <defs>
+    <linearGradient id="g" x1="70" y1="70" x2="1130" y2="830" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7A4E35"/>
+      <stop offset="1" stop-color="#22130E"/>
+    </linearGradient>
+  </defs>
+</svg>

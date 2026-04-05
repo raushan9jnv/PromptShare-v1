@@ -1,0 +1,11 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#15100E"/>
+  <rect x="70" y="70" width="1060" height="760" rx="34" fill="url(#g)"/>
+  <ellipse cx="420" cy="620" rx="220" ry="70" fill="#2A1B14"/>
+  <rect x="320" y="220" width="220" height="430" rx="48" fill="#F7C88E"/>
+  <rect x="360" y="250" width="140" height="370" rx="26" fill="#FFF0D4"/>
+  <circle cx="900" cy="220" r="140" fill="#F6A55E" opacity="0.22"/>
+  <text x="690" y="420" fill="#FFF4E8" font-size="72" font-family="Georgia, serif">OUTPUT</text>
+  <text x="690" y="495" fill="#F8C088" font-size="42" font-family="Arial, sans-serif">luxury campaign visual</text>
+  <defs><linearGradient id="g" x1="70" y1="70" x2="1130" y2="830"><stop stop-color="#5C3724"/><stop offset="1" stop-color="#150F0D"/></linearGradient></defs>
+</svg>

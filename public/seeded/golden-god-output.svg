@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" rx="40" fill="#180F08"/>
+  <rect x="70" y="70" width="1060" height="760" rx="34" fill="url(#g)"/>
+  <circle cx="424" cy="350" r="175" fill="#F3C676" opacity="0.95"/>
+  <circle cx="430" cy="314" r="72" fill="#FFF0C3"/>
+  <rect x="310" y="410" width="240" height="220" rx="108" fill="#E3AE50"/>
+  <path d="M720 540C780 420 860 360 940 280" stroke="#FFE8A6" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="900" cy="250" r="120" fill="#FFD56E" opacity="0.35"/>
+  <text x="680" y="430" fill="#FFF9E6" font-size="74" font-family="Georgia, serif">OUTPUT</text>
+  <text x="680" y="508" fill="#FFD489" font-size="42" font-family="Arial, sans-serif">divine fantasy portrait</text>
+  <defs><linearGradient id="g" x1="70" y1="70" x2="1130" y2="830"><stop stop-color="#8B5A17"/><stop offset="1" stop-color="#241308"/></linearGradient></defs>
+</svg>

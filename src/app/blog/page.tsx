@@ -1,12 +1,15 @@
+﻿/* eslint-disable @next/next/no-img-element */
+
 import Link from "next/link";
-import { getAllPosts } from "@/lib/blog/posts";
-import { blogTopics } from "@/lib/blog/topics";
+
 import { BlogCard } from "@/components/blog/BlogCard";
 import { BlogImage } from "@/components/blog/BlogImage";
+import { getAllPosts } from "@/lib/blog/posts";
+import { blogTopics } from "@/lib/blog/topics";
 
 export const metadata = {
-  title: "Blog — PromptShare",
-  description: "Tips, guides, and insights on prompt engineering and using AI models effectively.",
+  title: "Blog - PromptShare",
+  description: "Prompting guides, creator workflows, software prompting, and AI model tips.",
 };
 
 export default function BlogListPage() {
@@ -15,79 +18,47 @@ export default function BlogListPage() {
   const rest = posts.slice(1);
 
   return (
-    <div className="px-6 lg:px-10 py-10">
-      <div className="mx-auto w-full max-w-5xl">
-        {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight text-content-primary">
-            Blog
-          </h1>
-          <p className="mt-2 text-base text-content-secondary">
-            Tips, guides, and insights on prompt engineering.
+    <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
+      <div className="mx-auto w-full max-w-[1320px]">
+        <section className="rounded-[34px] border border-border-default/80 bg-surface-card/94 p-6 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.28)] sm:p-8">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-content-muted">PromptShare Journal</div>
+          <h1 className="mt-3 font-display text-4xl tracking-[-0.03em] text-content-primary sm:text-5xl">Guides for creators, builders, and people learning how to prompt better.</h1>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-content-secondary">
+            This is where we publish prompting guides, model-specific tips, software workflows, and creator-first playbooks that support the product.
           </p>
-        </div>
+        </section>
 
-        {/* Topic pills */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          <Link
-            href="/blog"
-            className="rounded-full bg-content-primary text-surface-primary px-4 py-1.5 text-sm font-medium transition-colors"
-          >
-            All
-          </Link>
-          {blogTopics.map((t) => (
+        <div className="mt-8 flex flex-wrap gap-2">
+          <Link href="/blog" className="rounded-full bg-content-primary px-4 py-2 text-sm font-medium text-surface-primary">All</Link>
+          {blogTopics.map((topic) => (
             <Link
-              key={t.slug}
-              href={`/blog/topic/${t.slug}`}
-              className="rounded-full border border-border-default px-4 py-1.5 text-sm font-medium text-content-secondary hover:bg-surface-secondary transition-colors"
+              key={topic.slug}
+              href={`/blog/topic/${topic.slug}`}
+              className="rounded-full border border-border-default px-4 py-2 text-sm font-medium text-content-secondary transition-colors hover:bg-surface-secondary hover:text-content-primary"
             >
-              {t.name}
+              {topic.name}
             </Link>
           ))}
         </div>
 
-        {/* Featured post */}
         {featured ? (
-          <div className="mb-12">
-            <Link
-              href={`/blog/${featured.slug}`}
-              className="group grid md:grid-cols-2 gap-6 rounded-xl border border-border-default bg-surface-card overflow-hidden transition-all duration-200 hover:border-content-muted hover:shadow-md"
-            >
-              {/* Cover */}
-              <div className="aspect-[16/9] md:aspect-auto bg-surface-secondary overflow-hidden">
-                {featured.coverImage ? (
-                  <BlogImage
-                    src={featured.coverImage}
-                    alt={featured.title}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                ) : (
-                  <div className="h-full w-full bg-gradient-to-br from-accent-500/10 to-accent-600/5 flex items-center justify-center min-h-[200px]">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-content-muted">
-                      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                      <polyline points="14 2 14 8 20 8" />
-                    </svg>
-                  </div>
-                )}
+          <div className="mt-8">
+            <Link href={`/blog/${featured.slug}`} className="group grid gap-6 overflow-hidden rounded-[30px] border border-border-default/80 bg-surface-card shadow-[0_24px_70px_-48px_rgba(15,23,42,0.28)] transition-all duration-200 hover:-translate-y-1 hover:border-accent-300 md:grid-cols-[1.08fr_0.92fr]">
+              <div className="overflow-hidden bg-surface-secondary">
+                <BlogImage src={featured.coverImage ?? "/blog/prompt-engineering-101.svg"} alt={featured.title} className="h-full min-h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
               </div>
-
-              {/* Content */}
-              <div className="p-6 flex flex-col justify-center">
-                <div className="flex items-center gap-3 text-xs text-content-muted mb-3">
-                  <time dateTime={featured.date}>
-                    {new Date(featured.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                  </time>
-                  <span className="rounded-full bg-surface-secondary px-2.5 py-0.5 font-medium text-content-secondary">
-                    {blogTopics.find(t => t.slug === featured.topic)?.name ?? featured.topic}
+              <div className="flex flex-col justify-center p-6 sm:p-8">
+                <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-content-muted">
+                  <time dateTime={featured.date}>{new Date(featured.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</time>
+                  <span className="rounded-full bg-surface-secondary px-2.5 py-1 font-medium text-content-secondary">
+                    {blogTopics.find((topic) => topic.slug === featured.topic)?.name ?? featured.topic}
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-content-primary leading-snug group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
+                <h2 className="text-2xl font-semibold leading-tight tracking-tight text-content-primary transition-colors group-hover:text-accent-600 dark:group-hover:text-accent-400 sm:text-3xl">
                   {featured.title}
                 </h2>
-                <p className="mt-3 text-sm text-content-secondary leading-relaxed line-clamp-3">
-                  {featured.description}
-                </p>
-                <div className="mt-4 text-xs text-content-muted flex items-center gap-4">
+                <p className="mt-3 text-sm leading-7 text-content-secondary">{featured.description}</p>
+                <div className="mt-5 flex items-center gap-4 text-xs text-content-muted">
                   <span>{featured.author}</span>
                   <span>{featured.readTime} min read</span>
                 </div>
@@ -96,24 +67,18 @@ export default function BlogListPage() {
           </div>
         ) : null}
 
-        {/* Grid of remaining posts */}
         {rest.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {rest.map((post) => (
               <BlogCard key={post.slug} post={post} />
             ))}
           </div>
         ) : null}
 
-        {/* Empty state */}
         {posts.length === 0 ? (
-          <div className="rounded-2xl border border-border-default bg-surface-card p-12 text-center">
-            <div className="text-4xl mb-4">📝</div>
-            <h2 className="text-xl font-semibold text-content-primary">Coming Soon</h2>
-            <p className="mt-2 text-sm text-content-secondary max-w-md mx-auto">
-              We&apos;re working on articles about prompt engineering, AI model comparisons,
-              and creative workflows. Stay tuned!
-            </p>
+          <div className="mt-8 rounded-[28px] border border-dashed border-border-default bg-surface-card p-12 text-center">
+            <h2 className="text-xl font-semibold text-content-primary">Blog coming soon</h2>
+            <p className="mt-2 text-sm leading-7 text-content-secondary">We are preparing guides for creator prompting, software workflows, and model-specific strategy.</p>
           </div>
         ) : null}
       </div>

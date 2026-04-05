@@ -1,8 +1,7 @@
-"use client";
+﻿"use client";
 
 /* eslint-disable @next/next/no-img-element */
 
-/** Client-side image that hides itself on error */
 export function BlogImage({
   src,
   alt,
@@ -17,8 +16,15 @@ export function BlogImage({
       src={src}
       alt={alt}
       className={className}
-      onError={(e) => {
-        (e.target as HTMLImageElement).style.display = "none";
+      onError={(event) => {
+        const image = event.target as HTMLImageElement;
+        if (!image.dataset.fallbackApplied) {
+          image.dataset.fallbackApplied = "true";
+          image.src = "/blog/prompt-engineering-101.svg";
+          return;
+        }
+
+        image.style.display = "none";
       }}
     />
   );
