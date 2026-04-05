@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-.5 3h1v3.5h2.5L12 13V8.5H9.5L12.5 5zM7 15.5A2.5 2.5 0 0 1 9.5 13h5a2.5 2.5 0 0 1 0 5h-5A2.5 2.5 0 0 1 7 15.5z" fill="url(#copilot_grad)"/>
+  <defs>
+    <linearGradient id="copilot_grad" x1="2" y1="2" x2="22" y2="22">
+      <stop stop-color="#6264A7"/>
+      <stop offset="0.5" stop-color="#0078D4"/>
+      <stop offset="1" stop-color="#50E6FF"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
-import { Sidebar } from "@/components/Sidebar";
+import { SidebarWrapper } from "@/components/SidebarWrapper";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { appConfig } from "@/lib/config";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -37,14 +46,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-950">
-        <Header />
-        <div className="mx-auto flex w-full max-w-7xl flex-1 gap-0">
-          <Sidebar />
-          <main className="min-w-0 flex-1">{children}</main>
-        </div>
+      {/* Inline script to prevent dark-mode flash */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('promptshare-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-surface-primary text-content-primary transition-colors duration-300">
+        <ThemeProvider>
+          <Header />
+          <div className="mx-auto flex w-full max-w-[1440px] flex-1 gap-0">
+            <SidebarWrapper />
+            <main className="min-w-0 flex-1">{children}</main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -4,6 +4,11 @@ export type Category = {
   description: string;
 };
 
+export type CategoryHighlight = {
+  sampleOutputs: string[];
+  accentClassName: string;
+};
+
 export type Model = {
   slug: string;
   name: string;
@@ -75,4 +80,79 @@ export function getModel(slug: string) {
 export function getContentType(slug: string): ContentTypeInfo | null {
   return contentTypes.find((c) => c.slug === slug) ?? null;
 }
+
+export const categoryHighlights: Record<string, CategoryHighlight> = {
+  trending: {
+    sampleOutputs: ["timely ideas", "popular formats", "fresh inspiration"],
+    accentClassName: "from-fuchsia-500/20 via-orange-400/10 to-transparent",
+  },
+  "social-media": {
+    sampleOutputs: ["hooks", "captions", "carousel ideas"],
+    accentClassName: "from-pink-500/20 via-orange-400/10 to-transparent",
+  },
+  youtube: {
+    sampleOutputs: ["titles", "scripts", "thumbnail angles"],
+    accentClassName: "from-red-500/20 via-orange-400/10 to-transparent",
+  },
+  tiktok: {
+    sampleOutputs: ["short scripts", "trend riffs", "CTAs"],
+    accentClassName: "from-cyan-500/20 via-fuchsia-400/10 to-transparent",
+  },
+  instagram: {
+    sampleOutputs: ["reels", "captions", "comment prompts"],
+    accentClassName: "from-amber-400/20 via-pink-500/10 to-transparent",
+  },
+  linkedin: {
+    sampleOutputs: ["thought pieces", "outreach", "positioning"],
+    accentClassName: "from-sky-500/20 via-cyan-400/10 to-transparent",
+  },
+  marketing: {
+    sampleOutputs: ["ads", "landing copy", "angles"],
+    accentClassName: "from-orange-500/20 via-yellow-400/10 to-transparent",
+  },
+  seo: {
+    sampleOutputs: ["briefs", "keywords", "meta ideas"],
+    accentClassName: "from-lime-500/20 via-emerald-400/10 to-transparent",
+  },
+  "email-marketing": {
+    sampleOutputs: ["subject lines", "drips", "newsletters"],
+    accentClassName: "from-amber-500/20 via-orange-400/10 to-transparent",
+  },
+  business: {
+    sampleOutputs: ["research", "proposals", "ops docs"],
+    accentClassName: "from-violet-500/20 via-indigo-400/10 to-transparent",
+  },
+  sales: {
+    sampleOutputs: ["discovery questions", "scripts", "objection replies"],
+    accentClassName: "from-emerald-500/20 via-lime-400/10 to-transparent",
+  },
+  software: {
+    sampleOutputs: ["debugging", "reviews", "system design"],
+    accentClassName: "from-blue-500/20 via-cyan-400/10 to-transparent",
+  },
+  sql: {
+    sampleOutputs: ["queries", "optimization", "schema help"],
+    accentClassName: "from-teal-500/20 via-sky-400/10 to-transparent",
+  },
+  product: {
+    sampleOutputs: ["PRDs", "roadmaps", "user stories"],
+    accentClassName: "from-indigo-500/20 via-violet-400/10 to-transparent",
+  },
+  education: {
+    sampleOutputs: ["study plans", "quizzes", "explanations"],
+    accentClassName: "from-yellow-500/20 via-orange-400/10 to-transparent",
+  },
+  productivity: {
+    sampleOutputs: ["templates", "summaries", "rewrites"],
+    accentClassName: "from-fuchsia-500/20 via-violet-400/10 to-transparent",
+  },
+  design: {
+    sampleOutputs: ["UX copy", "brand voice", "interface prompts"],
+    accentClassName: "from-rose-500/20 via-pink-400/10 to-transparent",
+  },
+  "image-prompts": {
+    sampleOutputs: ["styles", "scene prompts", "visual directions"],
+    accentClassName: "from-purple-500/20 via-fuchsia-400/10 to-transparent",
+  },
+};
 
