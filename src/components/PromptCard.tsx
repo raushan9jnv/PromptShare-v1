@@ -1,68 +1,89 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 
 import { CopyButton } from "@/components/CopyButton";
 import type { PromptListItem } from "@/lib/prompts";
-import { getCategory, getContentType, getModel } from "@/lib/taxonomy";
+import { getCategory, getContentType } from "@/lib/taxonomy";
 
 export type PromptCardVariant = "featured" | "standard" | "compact";
 
-function BookmarkButton() {
+const tagStyles: Record<string, string> = {
+  "image-transform": "bg-accent-50 text-accent-700 dark:bg-accent-800 dark:text-accent-200",
+  "social-media":    "bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300",
+  youtube:           "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300",
+  marketing:         "bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+  design:            "bg-pink-50 text-pink-700 dark:bg-pink-950 dark:text-pink-300",
+  software:          "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
+  education:         "bg-yellow-50 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300",
+};
+
+const defaultTag = "bg-surface-secondary text-content-secondary";
+
+function Tag({ slug, name }: { slug: string; name: string }) {
+  const style = tagStyles[slug] ?? defaultTag;
   return (
-    <button
-      type="button"
-      aria-label="Save prompt"
-      title="Save prompt"
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border-default bg-white/88 text-content-primary transition-all hover:-translate-y-0.5 hover:border-[var(--accent-strong)] dark:bg-black/20"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-      </svg>
-    </button>
+    <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${style}`}>
+      {name}
+    </span>
   );
 }
 
-export function PromptCard({ prompt, variant = "standard", priority = false }: { prompt: PromptListItem; variant?: PromptCardVariant; priority?: boolean }) {
+export function PromptCard({
+  prompt,
+  variant = "standard",
+  priority = false,
+}: {
+  prompt: PromptListItem;
+  variant?: PromptCardVariant;
+  priority?: boolean;
+}) {
   const category = getCategory(prompt.categorySlugs[0] ?? "");
-  const model = getModel(prompt.modelSlugs[0] ?? "");
   const ctype = getContentType(prompt.contentType);
-  const blurb = prompt.excerpt?.trim() || prompt.body.replace(/\s+/g, " ").trim().slice(0, 140);
   const isSupabasePublic = (url: string) => url.includes("/storage/v1/object/public/");
   const imageUrl = prompt.previewImageUrl ?? "/blog/prompt-engineering-101.svg";
 
+  const aspectClass =
+    variant === "featured" ? "aspect-[16/7]" : "aspect-[4/3]";
+
   return (
-    <article className={`group overflow-hidden rounded-[28px] border border-border-default/80 bg-surface-card shadow-[0_18px_60px_-40px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-strong)] ${variant === "featured" ? "lg:h-full" : ""}`}>
+    <article className="group relative overflow-hidden rounded-xl border border-border-default bg-surface-card transition-colors hover:border-[var(--accent-strong)]">
       <Link href={`/p/${prompt.slug}`} className="block">
-        <div className="relative aspect-[16/9] overflow-hidden bg-surface-secondary">
-          <Image src={imageUrl} alt="" fill sizes="(max-width: 1024px) 100vw, 720px" className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" unoptimized={isSupabasePublic(imageUrl)} priority={priority} />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.62))]" />
-          <div className="absolute left-4 top-4 flex gap-2">
-            {category ? <span className="rounded-full bg-black/35 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">{category.name}</span> : null}
-            {ctype ? <span className="rounded-full bg-white/18 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">{ctype.name}</span> : null}
-          </div>
-          <div className="absolute right-4 top-4 flex gap-2">
-            <CopyButton text={prompt.body} iconOnly />
-            <BookmarkButton />
-          </div>
+        <div className={`relative overflow-hidden bg-surface-secondary ${aspectClass}`}>
+          <Image
+            src={imageUrl}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            unoptimized={isSupabasePublic(imageUrl)}
+            priority={priority}
+          />
         </div>
       </Link>
 
-      <div className="p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className={`font-semibold tracking-tight text-content-primary ${variant === "featured" ? "text-2xl" : "text-xl"}`}>
-              <Link href={`/p/${prompt.slug}`}>{prompt.title}</Link>
-            </h3>
-            <p className="mt-2 text-sm leading-7 text-content-secondary line-clamp-3">{blurb}</p>
-          </div>
+      <div className="absolute right-2 top-2 flex gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+        <CopyButton text={prompt.body} iconOnly />
+      </div>
+
+      <div className="p-3">
+        <div className="mb-2 flex flex-wrap gap-1">
+          {category ? <Tag slug={category.slug} name={category.name} /> : null}
+          {ctype ? <Tag slug={ctype.slug} name={ctype.name} /> : null}
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-border-subtle pt-4">
-          <div className="text-xs uppercase tracking-[0.2em] text-content-muted">{model?.name ?? "Prompt"}</div>
-          <Link href={`/p/${prompt.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent-strong)] transition-colors hover:text-content-primary">
-            Open
-            <span aria-hidden="true">→</span>
-          </Link>
+        <Link href={`/p/${prompt.slug}`}>
+          <h3 className="line-clamp-2 text-[13px] font-medium leading-snug text-content-primary transition-colors group-hover:text-[var(--accent-strong)]">
+            {prompt.title}
+          </h3>
+        </Link>
+
+        <div className="mt-2 flex items-center justify-between">
+          <span className="text-[11px] text-content-muted">
+            {prompt.authorHandle ? `@${prompt.authorHandle}` : "PromptShare"}
+          </span>
+          {prompt.modelSlugs[0] ? (
+            <span className="text-[11px] text-content-muted capitalize">{prompt.modelSlugs[0]}</span>
+          ) : null}
         </div>
       </div>
     </article>
