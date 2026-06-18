@@ -7,6 +7,12 @@ import { getCategory, getContentType } from "@/lib/taxonomy";
 
 export type PromptCardVariant = "featured" | "standard" | "compact";
 
+// Deterministic gradient per slug so every text-only card has a distinct colour
+function gradientForSlug(slug: string) {
+  const h = Array.from(slug).reduce((acc, c) => acc + c.charCodeAt(0), 0) % 360;
+  return `hsl(${h}, 55%, 92%)`;
+}
+
 const tagStyles: Record<string, string> = {
   "image-transform": "bg-accent-50 text-accent-700 dark:bg-accent-800 dark:text-accent-200",
   "social-media":    "bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300",
@@ -20,9 +26,8 @@ const tagStyles: Record<string, string> = {
 const defaultTag = "bg-surface-secondary text-content-secondary";
 
 function Tag({ slug, name }: { slug: string; name: string }) {
-  const style = tagStyles[slug] ?? defaultTag;
   return (
-    <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${style}`}>
+    <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${tagStyles[slug] ?? defaultTag}`}>
       {name}
     </span>
   );
@@ -39,25 +44,37 @@ export function PromptCard({
 }) {
   const category = getCategory(prompt.categorySlugs[0] ?? "");
   const ctype = getContentType(prompt.contentType);
-  const isSupabasePublic = (url: string) => url.includes("/storage/v1/object/public/");
-  const imageUrl = prompt.previewImageUrl ?? "/blog/prompt-engineering-101.svg";
-
-  const aspectClass =
-    variant === "featured" ? "aspect-[16/7]" : "aspect-[4/3]";
+  const hasImage = !!prompt.previewImageUrl;
+  const aspectClass = variant === "featured" ? "aspect-[16/7]" : "aspect-[4/3]";
 
   return (
     <article className="group relative overflow-hidden rounded-xl border border-border-default bg-surface-card transition-colors hover:border-[var(--accent-strong)]">
       <Link href={`/p/${prompt.slug}`} className="block">
-        <div className={`relative overflow-hidden bg-surface-secondary ${aspectClass}`}>
-          <Image
-            src={imageUrl}
-            alt=""
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            unoptimized={isSupabasePublic(imageUrl)}
-            priority={priority}
-          />
+        <div className={`relative overflow-hidden ${aspectClass}`}>
+          {hasImage ? (
+            <Image
+              src={prompt.previewImageUrl!}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              unoptimized={prompt.previewImageUrl!.includes("/storage/v1/object/public/")}
+              priority={priority}
+            />
+          ) : (
+            // No image: show a text preview on a soft gradient background
+            <div
+              className="flex h-full w-full items-start p-4"
+              style={{ background: `linear-gradient(135deg, ${gradientForSlug(prompt.slug)} 0%, #f9f9fb 100%)` }}
+            >
+              {category ? (
+                <span className="mr-2 mt-0.5 shrink-0 text-2xl">{category.emoji}</span>
+              ) : null}
+              <p className="line-clamp-4 font-mono text-[11px] leading-relaxed text-zinc-600">
+                {prompt.body}
+              </p>
+            </div>
+          )}
         </div>
       </Link>
 

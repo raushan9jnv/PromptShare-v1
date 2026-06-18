@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { appConfig } from "@/lib/config";
+import { canCurrentUserAutoApprove } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const SubmitSchema = z.object({
@@ -78,6 +79,8 @@ export async function createPrompt(formData: FormData) {
   const fileEntries = formData.getAll("files").filter((value): value is File => value instanceof File);
   const files = fileEntries.filter((file) => file.size > 0);
 
+  const autoApprove = await canCurrentUserAutoApprove();
+
   const { data: inserted, error: insertError } = await supabase.from("prompts").insert({
     user_id: user.id,
     slug,
@@ -91,6 +94,7 @@ export async function createPrompt(formData: FormData) {
     model_slugs,
     tags,
     content_type,
+    status: autoApprove ? "approved" : "pending",
   }).select("id").single();
 
   if (insertError || !inserted) {
