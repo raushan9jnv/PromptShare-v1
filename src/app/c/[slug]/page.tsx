@@ -39,7 +39,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               <p className="text-sm text-content-muted">{category.description}</p>
             </div>
             <span className="shrink-0 rounded-full border border-border-default bg-surface-secondary px-3 py-1 text-xs text-content-muted">
-              {items.length > 0 ? items.length : category.count} prompts
+              {(() => { const n = items.length > 0 ? items.length : category.count; return `${n} ${n === 1 ? "prompt" : "prompts"}`; })()}
             </span>
           </div>
         </div>
