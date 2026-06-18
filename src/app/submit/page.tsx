@@ -3,7 +3,7 @@
 import { createPrompt } from "@/app/submit/actions";
 import { FormSubmitButton } from "@/components/FormSubmitButton";
 import { SubmitExperience } from "@/components/SubmitExperience";
-import { categories, contentTypes, models } from "@/lib/taxonomy";
+import { contentTypes } from "@/lib/taxonomy";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function SubmitPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
@@ -13,7 +13,14 @@ export default async function SubmitPage({ searchParams }: { searchParams: Promi
   if (!user) redirect("/login");
 
   const { error } = await searchParams;
-  const topicCategories = categories.filter((category) => category.slug !== "trending");
+
+  const [{ data: dbCategories }, { data: dbModels }] = await Promise.all([
+    supabase.from("categories").select("slug, name").neq("slug", "trending").order("sort_order", { ascending: true }),
+    supabase.from("models").select("slug, name").order("sort_order", { ascending: true }),
+  ]);
+
+  const topicCategories = dbCategories ?? [];
+  const models = dbModels ?? [];
 
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">

@@ -96,6 +96,13 @@ export function SidebarContent() {
             ))}
           </div>
         </section>
+
+        <section>
+          <SectionTitle>More</SectionTitle>
+          <div className="mt-2 space-y-1.5">
+            <NavLink href="/videos" label="Videos" active={pathname === "/videos"} icon="▶" />
+          </div>
+        </section>
       </div>
     </nav>
   );
