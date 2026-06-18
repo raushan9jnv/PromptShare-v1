@@ -55,7 +55,7 @@ export default async function Home() {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {featured ? <div className="md:col-span-2"><PromptCard prompt={featured} variant="featured" /></div> : null}
+            {featured ? <div className="md:col-span-2"><PromptCard prompt={featured} variant="featured" priority /></div> : null}
             {gridItems.map((prompt) => <PromptCard key={prompt.id} prompt={prompt} variant="compact" />)}
           </div>
         </div>

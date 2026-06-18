@@ -22,7 +22,7 @@ function BookmarkButton() {
   );
 }
 
-export function PromptCard({ prompt, variant = "standard" }: { prompt: PromptListItem; variant?: PromptCardVariant }) {
+export function PromptCard({ prompt, variant = "standard", priority = false }: { prompt: PromptListItem; variant?: PromptCardVariant; priority?: boolean }) {
   const category = getCategory(prompt.categorySlugs[0] ?? "");
   const model = getModel(prompt.modelSlugs[0] ?? "");
   const ctype = getContentType(prompt.contentType);
@@ -34,7 +34,7 @@ export function PromptCard({ prompt, variant = "standard" }: { prompt: PromptLis
     <article className={`group overflow-hidden rounded-[28px] border border-border-default/80 bg-surface-card shadow-[0_18px_60px_-40px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-strong)] ${variant === "featured" ? "lg:h-full" : ""}`}>
       <Link href={`/p/${prompt.slug}`} className="block">
         <div className="relative aspect-[16/9] overflow-hidden bg-surface-secondary">
-          <Image src={imageUrl} alt="" fill sizes="(max-width: 1024px) 100vw, 720px" className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" unoptimized={isSupabasePublic(imageUrl)} />
+          <Image src={imageUrl} alt="" fill sizes="(max-width: 1024px) 100vw, 720px" className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" unoptimized={isSupabasePublic(imageUrl)} priority={priority} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.62))]" />
           <div className="absolute left-4 top-4 flex gap-2">
             {category ? <span className="rounded-full bg-black/35 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">{category.name}</span> : null}
