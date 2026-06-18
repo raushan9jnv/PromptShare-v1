@@ -3,12 +3,17 @@
 const EnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(20),
+  // Server-only. Bypasses RLS — prefer the is_admin() RLS helper for admin
+  // operations instead. Only fall back to this if an operation genuinely
+  // can't be expressed in RLS (e.g. listing auth.users directly).
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(20).optional(),
 });
 
 function readEnv() {
   const parsed = EnvSchema.safeParse({
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   });
 
   if (!parsed.success) {
@@ -39,5 +44,8 @@ export const appConfig = {
   },
   links: {
     gemini: "https://gemini.google.com/app",
+  },
+  admin: {
+    bootstrapEmail: "raushan9jnv@gmail.com",
   },
 } as const;

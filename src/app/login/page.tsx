@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { signInWithPassword } from "@/app/(auth)/actions";
 import { FormSubmitButton } from "@/components/FormSubmitButton";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string; success?: string }> }) {
   const { error, success } = await searchParams;
@@ -21,8 +22,14 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             <label className="block"><span className="text-sm font-medium text-content-primary">Password</span><input name="password" type="password" autoComplete="current-password" required className="mt-2 w-full rounded-2xl border border-border-default bg-surface-secondary px-4 py-3 text-sm text-content-primary outline-none focus:border-accent-400" /></label>
             <FormSubmitButton pendingText="Signing in..." className="inline-flex w-full items-center justify-center rounded-full bg-accent-600 px-4 py-3 text-sm font-medium text-white">Sign in</FormSubmitButton>
           </form>
+          <div className="my-5 flex items-center gap-3">
+            <span className="h-px flex-1 bg-border-subtle" />
+            <span className="text-xs font-medium uppercase tracking-wide text-content-muted">or</span>
+            <span className="h-px flex-1 bg-border-subtle" />
+          </div>
+          <GoogleSignInButton />
         </div>
-        <p className="mt-6 text-center text-sm text-content-secondary">Don't have an account? <Link href="/signup" className="font-medium text-content-primary underline underline-offset-4">Create one</Link>.</p>
+        <p className="mt-6 text-center text-sm text-content-secondary">Don&apos;t have an account? <Link href="/signup" className="font-medium text-content-primary underline underline-offset-4">Create one</Link>.</p>
       </div>
     </div>
   );
