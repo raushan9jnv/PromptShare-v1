@@ -74,6 +74,15 @@ export function getContentType(slug: string): ContentTypeInfo | null {
   return contentTypes.find((type) => type.slug === slug) ?? null;
 }
 
+export const defaultCategoryHighlight: CategoryHighlight = {
+  sampleOutputs: ["fresh ideas", "new prompts", "community picks"],
+  accentClassName: "from-slate-500/25 via-zinc-300/10 to-transparent",
+};
+
+export function getCategoryHighlight(slug: string): CategoryHighlight {
+  return categoryHighlights[slug] ?? defaultCategoryHighlight;
+}
+
 export const categoryHighlights: Record<string, CategoryHighlight> = {
   trending: { sampleOutputs: ["fresh drops", "high saves", "top opens"], accentClassName: "from-orange-500/25 via-amber-300/10 to-transparent" },
   "image-transform": { sampleOutputs: ["restore", "fantasy", "cinematic"], accentClassName: "from-teal-500/25 via-cyan-300/10 to-transparent" },

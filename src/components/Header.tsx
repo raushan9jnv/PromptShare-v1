@@ -3,12 +3,14 @@ import Link from "next/link";
 import { signOut } from "@/app/(auth)/actions";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { appConfig } from "@/lib/config";
+import { getCurrentProfile } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function Header() {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.auth.getUser();
   const user = data.user;
+  const profile = user ? await getCurrentProfile() : null;
 
   return (
     <header className="sticky top-0 z-30 border-b border-border-default/80 bg-[var(--header-bg)] backdrop-blur-xl">
@@ -16,6 +18,10 @@ export async function Header() {
         <div className="flex min-w-0 flex-1 items-center gap-4">
           <Link href="/" className="shrink-0 text-xl font-bold tracking-tight text-content-primary">
             {appConfig.name}
+          </Link>
+
+          <Link href="/videos" className="hidden shrink-0 text-sm font-medium text-content-secondary transition-colors hover:text-content-primary md:inline-flex">
+            Videos
           </Link>
 
           <form action="/search" method="get" className="hidden w-full max-w-xl md:block">
@@ -38,6 +44,12 @@ export async function Header() {
 
         <div className="flex shrink-0 items-center gap-2">
           <ThemeToggle />
+
+          {profile?.role === "admin" ? (
+            <Link href="/admin" className="hidden items-center justify-center rounded-full border border-border-default bg-surface-card px-4 py-2 text-sm font-medium text-content-primary transition-all hover:-translate-y-0.5 hover:border-[var(--accent-strong)] sm:inline-flex">
+              Admin
+            </Link>
+          ) : null}
 
           {user ? (
             <Link href="/submit" aria-label="Create prompt" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-default bg-surface-card text-content-primary transition-all hover:-translate-y-0.5 hover:border-[var(--accent-strong)]">

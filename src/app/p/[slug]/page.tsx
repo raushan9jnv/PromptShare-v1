@@ -13,8 +13,15 @@ function pseudoMetric(input: string, min: number, max: number) {
   return min + (seed % (max - min + 1));
 }
 
-export default async function PromptPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function PromptPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ submitted?: string }>;
+}) {
   const { slug } = await params;
+  const { submitted } = await searchParams;
   const prompt = await getPromptBySlug(slug);
   if (!prompt) notFound();
 
@@ -60,6 +67,20 @@ export default async function PromptPage({ params }: { params: Promise<{ slug: s
           <span>/</span>
           <span className="truncate text-content-secondary">{prompt.title}</span>
         </nav>
+
+        {submitted && isOwner ? (
+          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            Thanks! Your prompt was submitted and is pending review. We will publish it once it&apos;s approved.
+          </div>
+        ) : null}
+
+        {isOwner && prompt.status !== "approved" ? (
+          <div className={`mb-6 rounded-2xl border px-4 py-3 text-sm ${prompt.status === "rejected" ? "border-red-200 bg-red-50 text-red-800" : "border-amber-200 bg-amber-50 text-amber-800"}`}>
+            {prompt.status === "rejected"
+              ? `This prompt was rejected by a moderator${prompt.rejectionReason ? `: ${prompt.rejectionReason}` : "."} Only you can see this page.`
+              : "This prompt is pending review and isn't visible to other users yet. Only you can see this page."}
+          </div>
+        ) : null}
 
         <section className="rounded-[34px] border border-border-default/80 bg-surface-card/95 p-6 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.25)] sm:p-8">
           <div className="flex flex-wrap items-center gap-2">

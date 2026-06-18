@@ -125,5 +125,5 @@ export async function createPrompt(formData: FormData) {
     redirect("/submit?error=" + encodeURIComponent(error instanceof Error ? error.message : "Upload failed. Try again."));
   }
 
-  redirect(`/p/${slug}`);
+  redirect(`/p/${slug}?submitted=1`);
 }

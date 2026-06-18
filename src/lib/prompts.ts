@@ -18,6 +18,8 @@ export type PromptRow = {
   tags?: string[] | null;
   content_type: ContentTypeSlug;
   created_at: string;
+  status?: "pending" | "approved" | "rejected";
+  rejection_reason?: string | null;
 };
 
 export type PromptAssetRow = {
@@ -45,6 +47,8 @@ export type PromptListItem = {
 export type PromptDetail = PromptListItem & {
   userId: string;
   assets: PromptAssetRow[];
+  status: "pending" | "approved" | "rejected";
+  rejectionReason: string | null;
 };
 
 function mapListRow(row: PromptRow & { prompt_assets?: PromptAssetRow[] | null }): PromptListItem {
@@ -82,38 +86,42 @@ const selectFields = `
   tags,
   content_type,
   created_at,
+  status,
+  rejection_reason,
   prompt_assets ( id, prompt_id, kind, public_url, sort_order )
 `;
 
 export async function listPromptsTrending(limit = 30): Promise<PromptListItem[]> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.from("prompts").select(selectFields).order("created_at", { ascending: false }).limit(limit);
+  const { data, error } = await supabase.from("prompts").select(selectFields).eq("status", "approved").order("created_at", { ascending: false }).limit(limit);
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => mapListRow(row as never));
 }
 
 export async function listPromptsByCategory(categorySlug: string): Promise<PromptListItem[]> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.from("prompts").select(selectFields).contains("category_slugs", [categorySlug]).order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("prompts").select(selectFields).eq("status", "approved").contains("category_slugs", [categorySlug]).order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => mapListRow(row as never));
 }
 
 export async function listPromptsByModel(modelSlug: string): Promise<PromptListItem[]> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.from("prompts").select(selectFields).contains("model_slugs", [modelSlug]).order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("prompts").select(selectFields).eq("status", "approved").contains("model_slugs", [modelSlug]).order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => mapListRow(row as never));
 }
 
 export async function listPromptsByContentType(type: ContentTypeSlug): Promise<PromptListItem[]> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.from("prompts").select(selectFields).eq("content_type", type).order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("prompts").select(selectFields).eq("status", "approved").eq("content_type", type).order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => mapListRow(row as never));
 }
 
 export async function listPromptsByUserId(userId: string): Promise<PromptListItem[]> {
+  // Used for a user's own dashboard context — RLS allows owners/admins to see
+  // their own non-approved rows too, so no explicit status filter here.
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.from("prompts").select(selectFields).eq("user_id", userId).order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
@@ -122,7 +130,7 @@ export async function listPromptsByUserId(userId: string): Promise<PromptListIte
 
 export async function countPromptsByUserId(userId: string): Promise<number> {
   const supabase = await createSupabaseServerClient();
-  const { count, error } = await supabase.from("prompts").select("id", { count: "exact", head: true }).eq("user_id", userId);
+  const { count, error } = await supabase.from("prompts").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("status", "approved");
   if (error) throw new Error(error.message);
   return count ?? 0;
 }
@@ -139,6 +147,7 @@ export async function searchPrompts(query: string): Promise<PromptListItem[]> {
   const { data: fts, error: ftsError } = await supabase
     .from("prompts")
     .select(selectFields)
+    .eq("status", "approved")
     .textSearch("search_vector", safe, { type: "websearch", config: "english" })
     .order("created_at", { ascending: false })
     .limit(50);
@@ -148,6 +157,7 @@ export async function searchPrompts(query: string): Promise<PromptListItem[]> {
   const { data, error } = await supabase
     .from("prompts")
     .select(selectFields)
+    .eq("status", "approved")
     .or(`title.ilike.${quotedPattern},body.ilike.${quotedPattern},excerpt.ilike.${quotedPattern}`)
     .order("created_at", { ascending: false })
     .limit(50);
@@ -165,5 +175,11 @@ export async function getPromptBySlug(slug: string): Promise<PromptDetail | null
   const row = data as PromptRow & { prompt_assets?: PromptAssetRow[] | null };
   const base = mapListRow(row);
   const assets = Array.isArray(row.prompt_assets) ? [...row.prompt_assets].sort((a, b) => a.sort_order - b.sort_order) : [];
-  return { ...base, userId: row.user_id, assets };
+  return {
+    ...base,
+    userId: row.user_id,
+    assets,
+    status: row.status ?? "approved",
+    rejectionReason: row.rejection_reason ?? null,
+  };
 }
