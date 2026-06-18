@@ -30,7 +30,7 @@ function getSiteUrl() {
   const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
   if (vercelUrl) return vercelUrl.startsWith("http") ? vercelUrl : `https://${vercelUrl}`;
 
-  return "https://promptshare-v1-raushan.vercel.app";
+  return "https://promptshare.app";
 }
 
 export const env = readEnv();

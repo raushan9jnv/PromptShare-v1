@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { appConfig } from "@/lib/config";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 function GoogleIcon() {
@@ -39,7 +38,7 @@ export function GoogleSignInButton({ className }: { className?: string }) {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${appConfig.siteUrl}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
     if (oauthError) {
