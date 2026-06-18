@@ -76,6 +76,8 @@ export async function createPrompt(formData: FormData) {
   const excerpt = excerptFromBody(body);
   const slug = makeSlug(title);
 
+  const youtubeUrl = String(formData.get("youtube_url") ?? "").trim();
+
   const fileEntries = formData.getAll("files").filter((value): value is File => value instanceof File);
   const files = fileEntries.filter((file) => file.size > 0);
 
@@ -106,6 +108,18 @@ export async function createPrompt(formData: FormData) {
 
   let sortOrder = 0;
   try {
+    // Save YouTube URL as a video asset (no storage upload needed)
+    if (youtubeUrl) {
+      const { error: ytAssetError } = await supabase.from("prompt_assets").insert({
+        prompt_id: promptId,
+        kind: "video",
+        storage_path: null,
+        public_url: youtubeUrl,
+        sort_order: sortOrder++,
+      });
+      if (ytAssetError) throw new Error(ytAssetError.message);
+    }
+
     for (const file of files) {
       const kind = assetKindFromMime(file.type);
       if (!kind) continue;

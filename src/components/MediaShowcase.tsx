@@ -3,6 +3,21 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 
+/** Returns the YouTube video ID from any YouTube URL, or null if not a YouTube URL. */
+function extractYouTubeEmbedId(url: string): string | null {
+  try {
+    const u = new URL(url);
+    if (u.hostname === "youtu.be") return u.pathname.slice(1).split("?")[0];
+    if (u.hostname.includes("youtube.com")) {
+      if (u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2];
+      return u.searchParams.get("v");
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export type ShowcaseAsset = {
   kind: "image" | "video" | "audio";
   public_url: string;
@@ -64,6 +79,22 @@ export function MediaShowcase({ assets }: { assets: ShowcaseAsset[] }) {
         <div className="grid gap-4 sm:grid-cols-2">
           {items.filter((asset) => asset.kind !== "image").map((asset) => {
             if (asset.kind === "video") {
+              const ytEmbedId = extractYouTubeEmbedId(asset.public_url);
+              if (ytEmbedId) {
+                return (
+                  <div key={asset.public_url} className="col-span-full overflow-hidden rounded-2xl border border-border-default bg-black">
+                    <div className="relative aspect-video">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${ytEmbedId}?rel=0`}
+                        title="Video preview"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 h-full w-full"
+                      />
+                    </div>
+                  </div>
+                );
+              }
               return <video key={asset.public_url} src={asset.public_url} controls className="w-full overflow-hidden rounded-2xl border border-border-default bg-black" preload="metadata" />;
             }
             return (

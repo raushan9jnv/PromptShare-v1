@@ -22,7 +22,9 @@ export async function Header() {
             <span className="text-[15px] font-medium tracking-tight text-content-primary">{appConfig.name}</span>
           </Link>
           <div className="hidden items-center gap-0.5 md:flex">
-            <Link href="/videos" className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Videos</Link>
+            {appConfig.features.videos ? (
+              <Link href="/videos" className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Videos</Link>
+            ) : null}
             {appConfig.features.blog ? (
               <Link href="/blog" className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Blog</Link>
             ) : null}

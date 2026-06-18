@@ -53,5 +53,7 @@ export const appConfig = {
     userSubmit: false,
     // Set to true to show the blog section in the nav and site.
     blog: false,
+    // Set to true to show the curated Videos section in the nav.
+    videos: false,
   },
 } as const;
