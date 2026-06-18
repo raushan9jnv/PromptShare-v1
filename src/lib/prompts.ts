@@ -20,6 +20,7 @@ export type PromptRow = {
   created_at: string;
   status?: "pending" | "approved" | "rejected";
   rejection_reason?: string | null;
+  likes_count?: number;
 };
 
 export type PromptAssetRow = {
@@ -49,6 +50,7 @@ export type PromptDetail = PromptListItem & {
   assets: PromptAssetRow[];
   status: "pending" | "approved" | "rejected";
   rejectionReason: string | null;
+  likesCount: number;
 };
 
 function mapListRow(row: PromptRow & { prompt_assets?: PromptAssetRow[] | null }): PromptListItem {
@@ -88,6 +90,7 @@ const selectFields = `
   created_at,
   status,
   rejection_reason,
+  likes_count,
   prompt_assets ( id, prompt_id, kind, public_url, sort_order )
 `;
 
@@ -181,5 +184,17 @@ export async function getPromptBySlug(slug: string): Promise<PromptDetail | null
     assets,
     status: row.status ?? "approved",
     rejectionReason: row.rejection_reason ?? null,
+    likesCount: row.likes_count ?? 0,
   };
+}
+
+export async function getLikedPromptsByUser(userId: string): Promise<PromptListItem[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("prompt_likes")
+    .select(`prompt_id, prompts!inner ( ${selectFields} )`)
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((row) => mapListRow((row as never as { prompts: PromptRow & { prompt_assets?: PromptAssetRow[] } }).prompts));
 }

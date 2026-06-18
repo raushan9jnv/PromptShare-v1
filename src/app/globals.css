@@ -7,13 +7,13 @@
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-display: var(--font-fraunces), Georgia, serif;
 
-  --color-accent-50:  #EEEDFE;
-  --color-accent-100: #CECBF6;
-  --color-accent-200: #AFA9EC;
-  --color-accent-400: #7F77DD;
-  --color-accent-600: #534AB7;
-  --color-accent-700: #3C3489;
-  --color-accent-800: #26215C;
+  --color-accent-50:  #EEF2FF;
+  --color-accent-100: #E0E7FF;
+  --color-accent-200: #C7D2FE;
+  --color-accent-400: #818CF8;
+  --color-accent-600: #4F46E5;
+  --color-accent-700: #4338CA;
+  --color-accent-800: #3730A3;
 
   --color-surface-primary:   var(--bg-primary);
   --color-surface-secondary: var(--bg-secondary);
@@ -41,7 +41,7 @@
   --border-color:  rgba(0, 0, 0, 0.08);
   --border-subtle: rgba(0, 0, 0, 0.04);
 
-  --accent-strong: #534AB7;
+  --accent-strong: #4F46E5;
   --header-bg: rgba(249, 249, 251, 0.85);
 }
 
@@ -58,7 +58,7 @@
   --border-color:  rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.04);
 
-  --accent-strong: #7F77DD;
+  --accent-strong: #818CF8;
   --header-bg: rgba(9, 9, 11, 0.88);
 }
 
