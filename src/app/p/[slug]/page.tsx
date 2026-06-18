@@ -13,27 +13,32 @@ function pseudoMetric(input: string, min: number, max: number) {
   return min + (seed % (max - min + 1));
 }
 
-export default async function PromptPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function PromptPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ submitted?: string }>;
+}) {
   const { slug } = await params;
+  const { submitted } = await searchParams;
   const prompt = await getPromptBySlug(slug);
   if (!prompt) notFound();
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const categories = prompt.categorySlugs.map((item) => getCategory(item)).filter(Boolean);
-  const models = prompt.modelSlugs.map((item) => getModel(item)).filter(Boolean);
+  const categories = prompt.categorySlugs.map((s) => getCategory(s)).filter(Boolean);
+  const models = prompt.modelSlugs.map((s) => getModel(s)).filter(Boolean);
   const contentType = getContentType(prompt.contentType);
   const summary = prompt.excerpt?.trim() || prompt.body.replace(/\s+/g, " ").trim().slice(0, 220);
   const creator = prompt.authorHandle ? `@${prompt.authorHandle}` : "PromptShare team";
   const isOwner = user?.id === prompt.userId;
+  const likes = pseudoMetric(prompt.slug, 12, 96);
+  const comments = pseudoMetric(prompt.title, 2, 18);
 
   let promptCount = 0;
-  try {
-    promptCount = await countPromptsByUserId(prompt.userId);
-  } catch {
-    promptCount = 0;
-  }
+  try { promptCount = await countPromptsByUserId(prompt.userId); } catch { promptCount = 0; }
 
   let related: PromptListItem[] = [];
   try {
@@ -45,94 +50,149 @@ export default async function PromptPage({ params }: { params: Promise<{ slug: s
       const seen = new Set(related.map((item) => item.id));
       related = [...related, ...more.filter((item) => item.slug !== prompt.slug && !seen.has(item.id)).slice(0, 3 - related.length)];
     }
-  } catch {
-    related = [];
-  }
-
-  const likes = pseudoMetric(prompt.slug, 12, 96);
-  const comments = pseudoMetric(prompt.title, 2, 18);
+  } catch { related = []; }
 
   return (
-    <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-      <div className="mx-auto max-w-[1320px]">
-        <nav className="mb-6 flex items-center gap-2 text-sm text-content-muted">
+    <div className="pb-16">
+      {submitted && isOwner ? (
+        <div className="border-b border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300">
+          Thanks! Your prompt was submitted and is pending review.
+        </div>
+      ) : null}
+
+
+      <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8">
+        <nav className="mb-5 flex items-center gap-1.5 text-xs text-content-muted">
           <Link href="/" className="transition-colors hover:text-content-primary">Home</Link>
           <span>/</span>
+          {categories[0] ? (
+            <>
+              <Link href={`/c/${categories[0].slug}`} className="transition-colors hover:text-content-primary">{categories[0].name}</Link>
+              <span>/</span>
+            </>
+          ) : null}
           <span className="truncate text-content-secondary">{prompt.title}</span>
         </nav>
 
-        <section className="rounded-[34px] border border-border-default/80 bg-surface-card/95 p-6 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.25)] sm:p-8">
-          <div className="flex flex-wrap items-center gap-2">
-            {contentType ? <span className="rounded-full bg-accent-500/12 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-700 dark:text-accent-300">{contentType.name}</span> : null}
-            {categories.map((category) => <Link key={category!.slug} href={`/c/${category!.slug}`} className="rounded-full border border-border-default bg-surface-secondary px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-content-secondary">{category!.name}</Link>)}
-          </div>
-          <h1 className="mt-5 max-w-4xl font-display text-4xl leading-tight tracking-[-0.035em] text-content-primary sm:text-5xl">{prompt.title}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-content-secondary">{summary}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <CopyButton text={prompt.body} className="bg-accent-600 text-white hover:bg-accent-700" />
-            {models[0] ? <a href={models[0].href} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center rounded-full border border-border-default bg-surface-card px-5 py-2.5 text-sm font-medium text-content-primary transition-all hover:-translate-y-0.5">Open in {models[0].name}</a> : null}
-            {isOwner ? <Link href={`/p/${prompt.slug}/edit`} className="inline-flex items-center justify-center rounded-full border border-border-default bg-surface-card px-5 py-2.5 text-sm font-medium text-content-primary transition-all hover:-translate-y-0.5">Edit prompt</Link> : null}
-          </div>
-        </section>
-
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="space-y-8">
-            <div className="rounded-[30px] border border-border-default/80 bg-surface-card p-5 shadow-[0_18px_60px_-44px_rgba(15,23,42,0.2)] sm:p-6">
-              <MediaShowcase assets={prompt.assets.map((asset) => ({ kind: asset.kind, public_url: asset.public_url }))} />
+        <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-2">
+              {contentType ? (
+                <span className="rounded-full bg-accent-50 px-2.5 py-0.5 text-[11px] font-medium text-accent-700 dark:bg-accent-800 dark:text-accent-200">
+                  {contentType.name}
+                </span>
+              ) : null}
+              {categories.map((cat) => (
+                <Link key={cat!.slug} href={`/c/${cat!.slug}`} className="rounded-full border border-border-default bg-surface-secondary px-2.5 py-0.5 text-[11px] text-content-secondary transition-colors hover:border-[var(--accent-strong)]">
+                  {cat!.name}
+                </Link>
+              ))}
             </div>
 
-            <div className="rounded-[30px] border border-border-default/80 bg-surface-card shadow-[0_18px_60px_-44px_rgba(15,23,42,0.2)]">
-              <div className="flex items-center justify-between gap-3 border-b border-border-subtle px-5 py-4 sm:px-6">
-                <div className="text-lg font-semibold text-content-primary">Prompt text</div>
+            <h1 className="text-2xl font-medium leading-snug tracking-[-0.03em] text-content-primary sm:text-3xl">{prompt.title}</h1>
+            <p className="text-sm leading-7 text-content-secondary">{summary}</p>
+
+            <div className="flex flex-wrap gap-2">
+              <CopyButton text={prompt.body} className="rounded-xl bg-accent-600 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90" />
+              {models[0] ? (
+                <a href={models[0].href} target="_blank" rel="noreferrer" className="rounded-xl border border-border-default bg-surface-card px-4 py-2 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
+                  Open in {models[0].name}
+                </a>
+              ) : null}
+              {isOwner ? (
+                <Link href={`/p/${prompt.slug}/edit`} className="rounded-xl border border-border-default bg-surface-card px-4 py-2 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
+                  Edit prompt
+                </Link>
+              ) : null}
+            </div>
+
+            {prompt.assets.length > 0 ? (
+              <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card p-4">
+                <MediaShowcase assets={prompt.assets.map((a) => ({ kind: a.kind, public_url: a.public_url }))} />
+              </div>
+            ) : null}
+
+            <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card">
+              <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
+                <span className="text-sm font-medium text-content-primary">Prompt text</span>
                 <CopyButton text={prompt.body} />
               </div>
-              <pre className="overflow-x-auto whitespace-pre-wrap px-5 py-5 font-mono text-sm leading-8 text-content-primary sm:px-6">{prompt.body}</pre>
+              <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-4 font-mono text-sm leading-7 text-content-primary">{prompt.body}</pre>
             </div>
           </div>
 
-          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-[28px] border border-border-default/80 bg-surface-card p-5 shadow-[0_18px_60px_-44px_rgba(15,23,42,0.2)]">
-              <div className="text-sm font-semibold text-content-primary">Engagement</div>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <button type="button" className="rounded-2xl bg-surface-secondary px-4 py-4 text-left transition-colors hover:bg-surface-elevated">
-                  <div className="text-content-muted">Likes</div>
-                  <div className="mt-1 text-xl font-semibold text-content-primary">{likes}</div>
-                </button>
-                <button type="button" className="rounded-2xl bg-surface-secondary px-4 py-4 text-left transition-colors hover:bg-surface-elevated">
-                  <div className="text-content-muted">Comments</div>
-                  <div className="mt-1 text-xl font-semibold text-content-primary">{comments}</div>
-                </button>
+          <aside className="space-y-4 lg:sticky lg:top-[113px] lg:self-start">
+            <div className="rounded-xl border border-border-default bg-surface-card p-4">
+              <div className="mb-3 text-xs font-medium uppercase tracking-wide text-content-muted">Engagement</div>
+              <div className="grid grid-cols-3 gap-2">
+                {[["Likes", likes], ["Comments", comments], ["Copies", pseudoMetric(prompt.title + prompt.slug, 8, 140)]].map(([label, val]) => (
+                  <div key={String(label)} className="rounded-lg bg-surface-secondary p-3 text-center">
+                    <div className="text-lg font-medium text-content-primary">{val}</div>
+                    <div className="text-[10px] text-content-muted">{label}</div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="rounded-[28px] border border-border-default/80 bg-surface-card p-5 shadow-[0_18px_60px_-44px_rgba(15,23,42,0.2)]">
-              <div className="text-sm font-semibold text-content-primary">Creator</div>
-              <div className="mt-4 flex items-center gap-4 rounded-2xl bg-surface-secondary px-4 py-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-600 text-sm font-semibold text-white">{creator.replace("@", "").slice(0, 2).toUpperCase()}</div>
+            <div className="rounded-xl border border-border-default bg-surface-card p-4">
+              <div className="mb-3 text-xs font-medium uppercase tracking-wide text-content-muted">Creator</div>
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-50 text-sm font-medium text-accent-700 dark:bg-accent-800 dark:text-accent-200">
+                  {creator.replace("@", "").slice(0, 2).toUpperCase()}
+                </div>
                 <div>
-                  <div className="font-medium text-content-primary">{creator}</div>
-                  <div className="text-sm text-content-secondary">{promptCount} prompts created</div>
+                  <div className="text-sm font-medium text-content-primary">{creator}</div>
+                  <div className="text-xs text-content-muted">{promptCount} prompts</div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-[28px] border border-border-default/80 bg-surface-card p-5 shadow-[0_18px_60px_-44px_rgba(15,23,42,0.2)]">
-              <div className="text-sm font-semibold text-content-primary">Works with</div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {models.map((model) => <Link key={model!.slug} href={`/m/${model!.slug}`} className="rounded-full bg-surface-secondary px-3 py-1.5 text-sm text-content-secondary">{model!.name}</Link>)}
+            {models.length > 0 || categories.length > 0 ? (
+              <div className="rounded-xl border border-border-default bg-surface-card p-4 space-y-3">
+                {models.length > 0 ? (
+                  <div>
+                    <div className="mb-2 text-xs font-medium uppercase tracking-wide text-content-muted">Works with</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {models.map((m) => (
+                        <Link key={m!.slug} href={`/m/${m!.slug}`} className="rounded-lg border border-border-default bg-surface-secondary px-2 py-1 text-xs text-content-secondary transition-colors hover:border-[var(--accent-strong)]">
+                          {m!.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                {categories.length > 0 ? (
+                  <div>
+                    <div className="mb-2 text-xs font-medium uppercase tracking-wide text-content-muted">Categories</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {categories.map((cat) => (
+                        <Link key={cat!.slug} href={`/c/${cat!.slug}`} className="rounded-lg border border-border-default bg-surface-secondary px-2 py-1 text-xs text-content-secondary transition-colors hover:border-[var(--accent-strong)]">
+                          {cat!.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
-              <div className="mt-4 text-sm font-semibold text-content-primary">Categories</div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {categories.map((category) => <Link key={category!.slug} href={`/c/${category!.slug}`} className="rounded-full bg-surface-secondary px-3 py-1.5 text-sm text-content-secondary">{category!.name}</Link>)}
+            ) : null}
+
+            {related.length > 0 ? (
+              <div className="rounded-xl border border-border-default bg-surface-card p-4">
+                <div className="mb-3 text-xs font-medium uppercase tracking-wide text-content-muted">Related prompts</div>
+                <div className="space-y-3">
+                  {related.map((item) => (
+                    <Link key={item.id} href={`/p/${item.slug}`} className="flex items-start gap-3 group">
+                      <div className="h-10 w-14 shrink-0 overflow-hidden rounded-lg border border-border-default bg-surface-secondary" />
+                      <div>
+                        <div className="text-xs font-medium leading-snug text-content-primary group-hover:text-[var(--accent-strong)] transition-colors line-clamp-2">{item.title}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : null}
           </aside>
         </div>
-
-        <section className="mt-12">
-          <div className="mb-6 text-2xl font-semibold tracking-tight text-content-primary">Related prompts</div>
-          {related.length > 0 ? <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{related.map((item) => <PromptCard key={item.id} prompt={item} variant="compact" />)}</div> : <div className="rounded-[28px] border border-dashed border-border-default bg-surface-card p-8 text-center text-sm text-content-secondary">Related prompts will appear here as the library grows.</div>}
-        </section>
       </div>
     </div>
   );

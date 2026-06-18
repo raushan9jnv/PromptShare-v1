@@ -1,8 +1,8 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 
+import { CategoryNav } from "@/components/CategoryNav";
 import { Header } from "@/components/Header";
-import { SidebarWrapper } from "@/components/SidebarWrapper";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { appConfig } from "@/lib/config";
@@ -23,18 +23,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('promptshare-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()` }} />
       </head>
-      <body className="min-h-full bg-surface-primary text-content-primary transition-colors duration-300">
+      <body className="min-h-full bg-surface-primary text-content-primary">
         <ThemeProvider>
           <div className="flex min-h-full flex-col">
             <Header />
-            <div className="mx-auto flex w-full max-w-[1440px] flex-1 gap-0">
-              <SidebarWrapper />
-              <main className="min-w-0 flex-1">{children}</main>
-            </div>
+            <CategoryNav />
+            <main className="min-w-0 flex-1">{children}</main>
             <SiteFooter />
           </div>
         </ThemeProvider>
