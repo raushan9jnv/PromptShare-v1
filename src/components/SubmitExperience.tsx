@@ -26,6 +26,7 @@ export function SubmitExperience({
   const [contentType, setContentType] = useState("image");
   const [category, setCategory] = useState(categories[0]?.slug ?? "");
   const [model, setModel] = useState(models[0]?.slug ?? "");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   const previewText = useMemo(() => body.replace(/\s+/g, " ").trim().slice(0, 130) || "Your prompt preview will update here as you type.", [body]);
 
@@ -93,20 +94,54 @@ export function SubmitExperience({
           <section className="space-y-4">
             <div>
               <div className="text-sm font-semibold text-content-primary">Step 2: Media</div>
-              <p className="mt-1 text-sm text-content-secondary">Upload images in order so the first can act like input and the second like output.</p>
+              <p className="mt-1 text-sm text-content-secondary">
+                {contentType === "video"
+                  ? "Paste a YouTube link showing the output — no upload needed, saves storage cost."
+                  : "Upload images in order: first = input/before, second = output/after."}
+              </p>
             </div>
-            <label className="block">
-              <span className="text-sm font-medium text-content-primary">Before image</span>
-              <input name="files" type="file" accept="image/*" className="mt-2 block w-full text-sm text-content-secondary file:mr-3 file:rounded-xl file:border file:border-border-default file:bg-surface-secondary file:px-4 file:py-2 file:text-sm file:font-medium file:text-content-primary" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium text-content-primary">After image</span>
-              <input name="files" type="file" accept="image/*" className="mt-2 block w-full text-sm text-content-secondary file:mr-3 file:rounded-xl file:border file:border-border-default file:bg-surface-secondary file:px-4 file:py-2 file:text-sm file:font-medium file:text-content-primary" />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium text-content-primary">Extra media</span>
-              <input name="files" type="file" multiple accept="image/*,video/*,audio/*" className="mt-2 block w-full text-sm text-content-secondary file:mr-3 file:rounded-xl file:border file:border-border-default file:bg-surface-secondary file:px-4 file:py-2 file:text-sm file:font-medium file:text-content-primary" />
-            </label>
+
+            {contentType === "video" ? (
+              <label className="block">
+                <span className="text-sm font-medium text-content-primary">YouTube preview URL</span>
+                <p className="mt-0.5 text-xs text-content-muted">e.g. https://youtu.be/abc123 or https://youtube.com/watch?v=abc123</p>
+                <input
+                  name="youtube_url"
+                  type="url"
+                  value={youtubeUrl}
+                  onChange={(e) => setYoutubeUrl(e.target.value)}
+                  placeholder="https://youtu.be/..."
+                  className="mt-2 w-full rounded-2xl border border-border-default bg-surface-secondary px-4 py-3 text-sm text-content-primary outline-none focus:border-accent-400"
+                />
+                {youtubeUrl && (
+                  <div className="mt-2 overflow-hidden rounded-xl border border-border-default bg-black">
+                    <div className="relative aspect-video">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${youtubeUrl.includes("youtu.be/") ? youtubeUrl.split("youtu.be/")[1]?.split("?")[0] : new URLSearchParams(youtubeUrl.split("?")[1] ?? "").get("v") ?? ""}?rel=0`}
+                        title="Preview"
+                        allowFullScreen
+                        className="absolute inset-0 h-full w-full"
+                      />
+                    </div>
+                  </div>
+                )}
+              </label>
+            ) : (
+              <>
+                <label className="block">
+                  <span className="text-sm font-medium text-content-primary">Before image</span>
+                  <input name="files" type="file" accept="image/*" className="mt-2 block w-full text-sm text-content-secondary file:mr-3 file:rounded-xl file:border file:border-border-default file:bg-surface-secondary file:px-4 file:py-2 file:text-sm file:font-medium file:text-content-primary" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-content-primary">After image</span>
+                  <input name="files" type="file" accept="image/*" className="mt-2 block w-full text-sm text-content-secondary file:mr-3 file:rounded-xl file:border file:border-border-default file:bg-surface-secondary file:px-4 file:py-2 file:text-sm file:font-medium file:text-content-primary" />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-content-primary">Extra media</span>
+                  <input name="files" type="file" multiple accept="image/*,audio/*" className="mt-2 block w-full text-sm text-content-secondary file:mr-3 file:rounded-xl file:border file:border-border-default file:bg-surface-secondary file:px-4 file:py-2 file:text-sm file:font-medium file:text-content-primary" />
+                </label>
+              </>
+            )}
           </section>
 
           <section>

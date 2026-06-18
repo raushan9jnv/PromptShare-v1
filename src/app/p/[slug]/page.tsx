@@ -2,16 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CopyButton } from "@/components/CopyButton";
+import { LikeButton } from "@/components/LikeButton";
 import { MediaShowcase } from "@/components/MediaShowcase";
 import { PromptCard } from "@/components/PromptCard";
 import { countPromptsByUserId, getPromptBySlug, listPromptsByCategory, listPromptsByModel, type PromptListItem } from "@/lib/prompts";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getCategory, getContentType, getModel } from "@/lib/taxonomy";
-
-function pseudoMetric(input: string, min: number, max: number) {
-  const seed = Array.from(input).reduce((total, char) => total + char.charCodeAt(0), 0);
-  return min + (seed % (max - min + 1));
-}
 
 export default async function PromptPage({
   params,
@@ -34,8 +30,18 @@ export default async function PromptPage({
   const summary = prompt.excerpt?.trim() || prompt.body.replace(/\s+/g, " ").trim().slice(0, 220);
   const creator = prompt.authorHandle ? `@${prompt.authorHandle}` : "PromptShare team";
   const isOwner = user?.id === prompt.userId;
-  const likes = pseudoMetric(prompt.slug, 12, 96);
-  const comments = pseudoMetric(prompt.title, 2, 18);
+
+  // Check if current user has liked this prompt
+  let userHasLiked = false;
+  if (user) {
+    const { data } = await supabase
+      .from("prompt_likes")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .eq("prompt_id", prompt.id)
+      .maybeSingle();
+    userHasLiked = !!data;
+  }
 
   let promptCount = 0;
   try { promptCount = await countPromptsByUserId(prompt.userId); } catch { promptCount = 0; }
@@ -59,7 +65,6 @@ export default async function PromptPage({
           Thanks! Your prompt was submitted and is pending review.
         </div>
       ) : null}
-
 
       <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8">
         <nav className="mb-5 flex items-center gap-1.5 text-xs text-content-muted">
@@ -94,6 +99,13 @@ export default async function PromptPage({
 
             <div className="flex flex-wrap gap-2">
               <CopyButton text={prompt.body} className="rounded-xl bg-accent-600 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90" />
+              <LikeButton
+                promptId={prompt.id}
+                promptSlug={prompt.slug}
+                initialLiked={userHasLiked}
+                initialCount={prompt.likesCount}
+                isLoggedIn={!!user}
+              />
               {models[0] ? (
                 <a href={models[0].href} target="_blank" rel="noreferrer" className="rounded-xl border border-border-default bg-surface-card px-4 py-2 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
                   Open in {models[0].name}
@@ -101,7 +113,7 @@ export default async function PromptPage({
               ) : null}
               {isOwner ? (
                 <Link href={`/p/${prompt.slug}/edit`} className="rounded-xl border border-border-default bg-surface-card px-4 py-2 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
-                  Edit prompt
+                  Edit
                 </Link>
               ) : null}
             </div>
@@ -123,21 +135,23 @@ export default async function PromptPage({
 
           <aside className="space-y-4 lg:sticky lg:top-[113px] lg:self-start">
             <div className="rounded-xl border border-border-default bg-surface-card p-4">
-              <div className="mb-3 text-xs font-medium uppercase tracking-wide text-content-muted">Engagement</div>
-              <div className="grid grid-cols-3 gap-2">
-                {[["Likes", likes], ["Comments", comments], ["Copies", pseudoMetric(prompt.title + prompt.slug, 8, 140)]].map(([label, val]) => (
-                  <div key={String(label)} className="rounded-lg bg-surface-secondary p-3 text-center">
-                    <div className="text-lg font-medium text-content-primary">{val}</div>
-                    <div className="text-[10px] text-content-muted">{label}</div>
-                  </div>
-                ))}
+              <div className="mb-3 text-xs font-medium uppercase tracking-wide text-content-muted">Stats</div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-lg bg-surface-secondary p-3 text-center">
+                  <div className="text-lg font-medium text-content-primary">{prompt.likesCount}</div>
+                  <div className="text-[10px] text-content-muted">Likes</div>
+                </div>
+                <div className="rounded-lg bg-surface-secondary p-3 text-center">
+                  <div className="text-lg font-medium text-content-primary">{promptCount}</div>
+                  <div className="text-[10px] text-content-muted">By creator</div>
+                </div>
               </div>
             </div>
 
             <div className="rounded-xl border border-border-default bg-surface-card p-4">
               <div className="mb-3 text-xs font-medium uppercase tracking-wide text-content-muted">Creator</div>
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-50 text-sm font-medium text-accent-700 dark:bg-accent-800 dark:text-accent-200">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-50 text-sm font-medium text-accent-700 dark:bg-accent-800 dark:text-accent-200">
                   {creator.replace("@", "").slice(0, 2).toUpperCase()}
                 </div>
                 <div>
@@ -148,7 +162,7 @@ export default async function PromptPage({
             </div>
 
             {models.length > 0 || categories.length > 0 ? (
-              <div className="rounded-xl border border-border-default bg-surface-card p-4 space-y-3">
+              <div className="space-y-3 rounded-xl border border-border-default bg-surface-card p-4">
                 {models.length > 0 ? (
                   <div>
                     <div className="mb-2 text-xs font-medium uppercase tracking-wide text-content-muted">Works with</div>
@@ -181,11 +195,9 @@ export default async function PromptPage({
                 <div className="mb-3 text-xs font-medium uppercase tracking-wide text-content-muted">Related prompts</div>
                 <div className="space-y-3">
                   {related.map((item) => (
-                    <Link key={item.id} href={`/p/${item.slug}`} className="flex items-start gap-3 group">
+                    <Link key={item.id} href={`/p/${item.slug}`} className="group flex items-start gap-3">
                       <div className="h-10 w-14 shrink-0 overflow-hidden rounded-lg border border-border-default bg-surface-secondary" />
-                      <div>
-                        <div className="text-xs font-medium leading-snug text-content-primary group-hover:text-[var(--accent-strong)] transition-colors line-clamp-2">{item.title}</div>
-                      </div>
+                      <div className="text-xs font-medium leading-snug text-content-primary line-clamp-2 transition-colors group-hover:text-[var(--accent-strong)]">{item.title}</div>
                     </Link>
                   ))}
                 </div>

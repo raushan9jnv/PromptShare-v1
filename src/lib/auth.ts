@@ -7,7 +7,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type Profile = {
   id: string;
-  role: "user" | "admin";
+  role: "user" | "editor" | "admin";
   display_name: string | null;
   avatar_url: string | null;
   email: string | null;
@@ -34,6 +34,11 @@ export async function getCurrentProfile(): Promise<Profile | null> {
 export async function isCurrentUserAdmin(): Promise<boolean> {
   const profile = await getCurrentProfile();
   return profile?.role === "admin";
+}
+
+export async function canCurrentUserAutoApprove(): Promise<boolean> {
+  const profile = await getCurrentProfile();
+  return profile?.role === "admin" || profile?.role === "editor";
 }
 
 /**

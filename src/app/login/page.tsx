@@ -19,7 +19,13 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <div className="rounded-[28px] border border-border-default bg-surface-card p-6">
           <form action={signInWithPassword} className="space-y-4">
             <label className="block"><span className="text-sm font-medium text-content-primary">Email</span><input name="email" type="email" autoComplete="email" required className="mt-2 w-full rounded-2xl border border-border-default bg-surface-secondary px-4 py-3 text-sm text-content-primary outline-none focus:border-accent-400" /></label>
-            <label className="block"><span className="text-sm font-medium text-content-primary">Password</span><input name="password" type="password" autoComplete="current-password" required className="mt-2 w-full rounded-2xl border border-border-default bg-surface-secondary px-4 py-3 text-sm text-content-primary outline-none focus:border-accent-400" /></label>
+            <label className="block">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-content-primary">Password</span>
+                <Link href="/forgot-password" className="text-xs text-content-muted underline underline-offset-4 hover:text-content-primary">Forgot password?</Link>
+              </div>
+              <input name="password" type="password" autoComplete="current-password" required className="mt-2 w-full rounded-2xl border border-border-default bg-surface-secondary px-4 py-3 text-sm text-content-primary outline-none focus:border-accent-400" />
+            </label>
             <FormSubmitButton pendingText="Signing in..." className="inline-flex w-full items-center justify-center rounded-full bg-accent-600 px-4 py-3 text-sm font-medium text-white">Sign in</FormSubmitButton>
           </form>
           <div className="my-5 flex items-center gap-3">

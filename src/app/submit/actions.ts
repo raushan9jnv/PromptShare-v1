@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { appConfig } from "@/lib/config";
+import { canCurrentUserAutoApprove } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const SubmitSchema = z.object({
@@ -75,8 +76,12 @@ export async function createPrompt(formData: FormData) {
   const excerpt = excerptFromBody(body);
   const slug = makeSlug(title);
 
+  const youtubeUrl = String(formData.get("youtube_url") ?? "").trim();
+
   const fileEntries = formData.getAll("files").filter((value): value is File => value instanceof File);
   const files = fileEntries.filter((file) => file.size > 0);
+
+  const autoApprove = await canCurrentUserAutoApprove();
 
   const { data: inserted, error: insertError } = await supabase.from("prompts").insert({
     user_id: user.id,
@@ -91,6 +96,7 @@ export async function createPrompt(formData: FormData) {
     model_slugs,
     tags,
     content_type,
+    status: autoApprove ? "approved" : "pending",
   }).select("id").single();
 
   if (insertError || !inserted) {
@@ -102,6 +108,18 @@ export async function createPrompt(formData: FormData) {
 
   let sortOrder = 0;
   try {
+    // Save YouTube URL as a video asset (no storage upload needed)
+    if (youtubeUrl) {
+      const { error: ytAssetError } = await supabase.from("prompt_assets").insert({
+        prompt_id: promptId,
+        kind: "video",
+        storage_path: null,
+        public_url: youtubeUrl,
+        sort_order: sortOrder++,
+      });
+      if (ytAssetError) throw new Error(ytAssetError.message);
+    }
+
     for (const file of files) {
       const kind = assetKindFromMime(file.type);
       if (!kind) continue;

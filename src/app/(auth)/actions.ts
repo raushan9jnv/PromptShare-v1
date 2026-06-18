@@ -70,3 +70,19 @@ export async function signOut() {
   redirect("/");
 }
 
+export async function requestPasswordReset(formData: FormData) {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) redirect(`/forgot-password?error=${encodeURIComponent("Email is required.")}`);
+
+  const supabase = await createSupabaseServerClient();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
+  });
+
+  if (error) redirect(`/forgot-password?error=${encodeURIComponent(error.message)}`);
+
+  redirect(`/forgot-password?success=${encodeURIComponent("Check your email for a password reset link.")}`);
+}
+
