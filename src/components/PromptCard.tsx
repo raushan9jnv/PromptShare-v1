@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { CategoryIcon } from "@/components/CategoryIcon";
 import { CopyButton } from "@/components/CopyButton";
 import type { PromptListItem } from "@/lib/prompts";
 import { getCategory, getContentType } from "@/lib/taxonomy";
@@ -68,7 +69,7 @@ export function PromptCard({
               style={{ background: `linear-gradient(135deg, ${gradientForSlug(prompt.slug)} 0%, #f9f9fb 100%)` }}
             >
               {category ? (
-                <span className="mr-2 mt-0.5 shrink-0 text-2xl">{category.emoji}</span>
+                <CategoryIcon slug={category.slug} className="mr-2 mt-0.5 h-5 w-5 shrink-0 opacity-50" color={category.color} />
               ) : null}
               <p className="line-clamp-4 font-mono text-[11px] leading-relaxed text-zinc-600">
                 {prompt.body}

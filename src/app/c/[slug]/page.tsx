@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { CategoryIcon } from "@/components/CategoryIcon";
 import { PromptCard } from "@/components/PromptCard";
 import { listPromptsByCategory } from "@/lib/prompts";
 import { categories, getCategory } from "@/lib/taxonomy";
@@ -30,7 +31,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           <div className="flex items-end justify-between gap-4">
             <div>
               <div className="mb-1 flex items-center gap-2.5">
-                <span className="text-2xl leading-none">{category.emoji}</span>
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ backgroundColor: `${category.color}1A` }}>
+                  <CategoryIcon slug={category.slug} className="h-5 w-5" color={category.color} />
+                </div>
                 <h1 className="text-xl font-medium text-content-primary">{category.name}</h1>
               </div>
               <p className="text-sm text-content-muted">{category.description}</p>

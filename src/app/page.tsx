@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { CategoryIcon } from "@/components/CategoryIcon";
 import { PromptCard } from "@/components/PromptCard";
 
 export const revalidate = 60;
@@ -103,11 +104,13 @@ export default async function Home() {
               className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-border-default bg-surface-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--accent-strong)] hover:shadow-lg"
             >
               <div
-                className="absolute inset-0 opacity-[0.06] transition-opacity group-hover:opacity-[0.10]"
+                className="absolute inset-0 opacity-[0.07] transition-opacity group-hover:opacity-[0.12]"
                 style={{ background: `radial-gradient(circle at 30% 20%, ${cat!.color}, transparent 70%)` }}
                 aria-hidden="true"
               />
-              <span className="relative text-3xl leading-none">{cat!.emoji}</span>
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: `${cat!.color}18` }}>
+                <CategoryIcon slug={cat!.slug} className="h-5 w-5" color={cat!.color} />
+              </div>
               <div className="relative">
                 <div className="text-[13px] font-semibold text-content-primary transition-colors group-hover:text-[var(--accent-strong)]">{cat!.name}</div>
                 <div className="mt-0.5 text-[11px] text-content-muted">{cat!.count} prompts</div>
