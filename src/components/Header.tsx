@@ -10,6 +10,9 @@ export async function Header() {
   const { data } = await supabase.auth.getUser();
   const user = data.user;
 
+  const isAdmin = user?.email === appConfig.admin.bootstrapEmail;
+  const showSubmit = appConfig.features.userSubmit || isAdmin;
+
   return (
     <header className="sticky top-0 z-30 border-b border-border-default bg-[var(--header-bg)] backdrop-blur-xl">
       <div className="mx-auto flex h-[57px] max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
@@ -19,8 +22,10 @@ export async function Header() {
             <span className="text-[15px] font-medium tracking-tight text-content-primary">{appConfig.name}</span>
           </Link>
           <div className="hidden items-center gap-0.5 md:flex">
-            <Link href="/videos"   className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Videos</Link>
-            <Link href="/blog"     className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Blog</Link>
+            <Link href="/videos" className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Videos</Link>
+            {appConfig.features.blog ? (
+              <Link href="/blog" className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Blog</Link>
+            ) : null}
             <Link href="/services" className="rounded-lg px-3 py-1.5 text-sm text-content-muted transition-colors hover:text-content-primary">Services</Link>
           </div>
         </div>
@@ -40,21 +45,27 @@ export async function Header() {
         <div className="flex shrink-0 items-center gap-2">
           <ThemeToggle />
           {user ? (
-            <Link href="/submit" className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-border-default bg-surface-card px-3 py-1.5 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              Submit
-            </Link>
+            <>
+              {showSubmit ? (
+                <Link href="/submit" className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-border-default bg-surface-card px-3 py-1.5 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                  Submit
+                </Link>
+              ) : null}
+              <Link href="/profile" className="hidden sm:inline-flex rounded-xl border border-border-default bg-surface-card px-3 py-1.5 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
+                Profile
+              </Link>
+              <form action={signOut}>
+                <button type="submit" className="rounded-xl bg-accent-600 px-3 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90">Sign out</button>
+              </form>
+            </>
           ) : (
-            <Link href="/signup" className="hidden sm:inline-flex rounded-xl border border-border-default bg-surface-card px-3 py-1.5 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
-              Join free
-            </Link>
-          )}
-          {user ? (
-            <form action={signOut}>
-              <button type="submit" className="rounded-xl bg-accent-600 px-3 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90">Sign out</button>
-            </form>
-          ) : (
-            <Link href="/login" className="rounded-xl bg-accent-600 px-3 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90">Sign in</Link>
+            <>
+              <Link href="/signup" className="hidden sm:inline-flex rounded-xl border border-border-default bg-surface-card px-3 py-1.5 text-sm font-medium text-content-primary transition-colors hover:border-[var(--accent-strong)]">
+                Join free
+              </Link>
+              <Link href="/login" className="rounded-xl bg-accent-600 px-3 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90">Sign in</Link>
+            </>
           )}
         </div>
       </div>

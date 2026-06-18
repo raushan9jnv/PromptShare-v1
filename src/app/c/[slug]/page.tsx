@@ -5,6 +5,8 @@ import { PromptCard } from "@/components/PromptCard";
 import { listPromptsByCategory } from "@/lib/prompts";
 import { categories, getCategory } from "@/lib/taxonomy";
 
+export const revalidate = 60;
+
 export function generateStaticParams() {
   return categories.map((c) => ({ slug: c.slug }));
 }
@@ -27,13 +29,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           </nav>
           <div className="flex items-end justify-between gap-4">
             <div>
-              <div className="mb-1 flex items-center gap-2">
-                <span
-                  className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-medium text-white"
-                  style={{ backgroundColor: category.color }}
-                >
-                  {category.name.slice(0, 1)}
-                </span>
+              <div className="mb-1 flex items-center gap-2.5">
+                <span className="text-2xl leading-none">{category.emoji}</span>
                 <h1 className="text-xl font-medium text-content-primary">{category.name}</h1>
               </div>
               <p className="text-sm text-content-muted">{category.description}</p>

@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { PromptCard } from "@/components/PromptCard";
+
+export const revalidate = 60;
 import { listPromptsTrending } from "@/lib/prompts";
 import { categories } from "@/lib/taxonomy";
 
@@ -98,17 +100,17 @@ export default async function Home() {
             <Link
               key={cat!.slug}
               href={`/c/${cat!.slug}`}
-              className="group flex flex-col gap-2 rounded-xl border border-border-default bg-surface-card p-4 transition-colors hover:border-[var(--accent-strong)]"
+              className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-border-default bg-surface-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--accent-strong)] hover:shadow-lg"
             >
               <div
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium text-white"
-                style={{ backgroundColor: cat!.color }}
-              >
-                {cat!.name.slice(0, 1)}
-              </div>
-              <div>
-                <div className="text-[13px] font-medium text-content-primary group-hover:text-[var(--accent-strong)]">{cat!.name}</div>
-                <div className="text-[11px] text-content-muted">{cat!.count} prompts</div>
+                className="absolute inset-0 opacity-[0.06] transition-opacity group-hover:opacity-[0.10]"
+                style={{ background: `radial-gradient(circle at 30% 20%, ${cat!.color}, transparent 70%)` }}
+                aria-hidden="true"
+              />
+              <span className="relative text-3xl leading-none">{cat!.emoji}</span>
+              <div className="relative">
+                <div className="text-[13px] font-semibold text-content-primary transition-colors group-hover:text-[var(--accent-strong)]">{cat!.name}</div>
+                <div className="mt-0.5 text-[11px] text-content-muted">{cat!.count} prompts</div>
               </div>
             </Link>
           ))}

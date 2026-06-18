@@ -3,6 +3,7 @@
 import { createPrompt } from "@/app/submit/actions";
 import { FormSubmitButton } from "@/components/FormSubmitButton";
 import { SubmitExperience } from "@/components/SubmitExperience";
+import { appConfig } from "@/lib/config";
 import { contentTypes } from "@/lib/taxonomy";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -11,6 +12,19 @@ export default async function SubmitPage({ searchParams }: { searchParams: Promi
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
+
+  const isAdmin = user.email === appConfig.admin.bootstrapEmail;
+  if (!appConfig.features.userSubmit && !isAdmin) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center px-4">
+        <div className="max-w-sm text-center">
+          <div className="mb-4 text-5xl">🚧</div>
+          <h1 className="mb-2 text-xl font-semibold text-content-primary">Coming soon</h1>
+          <p className="text-sm text-content-muted">Public prompt submissions are not open yet. Stay tuned!</p>
+        </div>
+      </div>
+    );
+  }
 
   const { error } = await searchParams;
 

@@ -7,34 +7,18 @@ import { categories } from "@/lib/taxonomy";
 
 const primary = ["trending", "image-transform", "social-media", "prompt-packs", "youtube", "marketing", "design", "software", "education"];
 
-const icons: Record<string, string> = {
-  trending: "↗",
-  "image-transform": "◐",
-  "social-media": "#",
-  "prompt-packs": "⊞",
-  youtube: "▶",
-  marketing: "◎",
-  design: "✦",
-  software: "⌘",
-  education: "◎",
-  "image-prompts": "◈",
-  productivity: "⚡",
-  instagram: "○",
-  linkedin: "□",
-  sql: "◇",
-  business: "△",
-};
+const emojiMap = Object.fromEntries(categories.map((c) => [c.slug, c.emoji]));
 
 export function CategoryNav() {
   const pathname = usePathname();
 
   const navItems = [
-    { slug: "all", name: "All", href: "/" },
+    { slug: "all", name: "All", emoji: null, href: "/" },
     ...primary
       .map((slug) => categories.find((c) => c.slug === slug))
       .filter(Boolean)
-      .map((c) => ({ slug: c!.slug, name: c!.name, href: `/c/${c!.slug}` })),
-    { slug: "more", name: "+ More", href: "/c/image-prompts" },
+      .map((c) => ({ slug: c!.slug, name: c!.name, emoji: c!.emoji, href: `/c/${c!.slug}` })),
+    { slug: "more", name: "+ More", emoji: null, href: "/c/image-prompts" },
   ];
 
   return (
@@ -58,9 +42,7 @@ export function CategoryNav() {
                 : "border-transparent text-content-muted hover:text-content-secondary"
             }`}
           >
-            {icons[item.slug] ? (
-              <span className="text-[10px] opacity-60">{icons[item.slug]}</span>
-            ) : null}
+            {item.emoji ? <span className="text-sm leading-none">{item.emoji}</span> : null}
             {item.name}
           </Link>
         );

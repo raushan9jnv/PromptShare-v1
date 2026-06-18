@@ -4,6 +4,7 @@
   description: string;
   count: number;
   color: string;
+  emoji: string;
 };
 
 export type CategoryHighlight = {
@@ -35,21 +36,21 @@ export const contentTypes: ContentTypeInfo[] = [
 ];
 
 export const categories: Category[] = [
-  { slug: "trending", name: "Trending", description: "What is getting opened and copied most.", count: 24, color: "#E8883A" },
-  { slug: "image-transform", name: "Image Transform", description: "Before-after edits, restoration, fantasy, glow-ups.", count: 62, color: "#1E9D8B" },
-  { slug: "social-media", name: "Social Media", description: "Hooks, captions, carousels, and short-form ideas.", count: 56, color: "#E8883A" },
-  { slug: "prompt-packs", name: "Prompt Packs", description: "Grouped prompt bundles for repeatable workflows.", count: 18, color: "#8B5CF6" },
-  { slug: "youtube", name: "YouTube", description: "Titles, scripts, thumbnails, retention angles.", count: 32, color: "#E4572E" },
-  { slug: "marketing", name: "Marketing", description: "Ads, offers, funnels, and campaign copy.", count: 28, color: "#D97706" },
-  { slug: "design", name: "Design", description: "Creative direction, brand voice, and interface copy.", count: 21, color: "#EC4899" },
-  { slug: "software", name: "Software / Dev", description: "Code reviews, debugging, and engineering prompts.", count: 16, color: "#3B82F6" },
-  { slug: "education", name: "Education", description: "Study help, UPSC framing, and structured learning.", count: 14, color: "#F59E0B" },
-  { slug: "image-prompts", name: "Image Prompts", description: "Direct prompts for Midjourney, DALL-E, and similar tools.", count: 40, color: "#14B8A6" },
-  { slug: "productivity", name: "Productivity", description: "Summaries, rewrites, and everyday accelerators.", count: 19, color: "#6366F1" },
-  { slug: "instagram", name: "Instagram", description: "Reels, captions, and carousel copy.", count: 26, color: "#F97316" },
-  { slug: "linkedin", name: "LinkedIn", description: "Thought leadership and professional writing.", count: 12, color: "#0EA5E9" },
-  { slug: "sql", name: "SQL", description: "Query building and optimization.", count: 8, color: "#0F766E" },
-  { slug: "business", name: "Business", description: "Research, proposals, and execution docs.", count: 10, color: "#7C3AED" },
+  { slug: "trending", name: "Trending", description: "What is getting opened and copied most.", count: 24, color: "#E8883A", emoji: "🔥" },
+  { slug: "image-transform", name: "Image Transform", description: "Before-after edits, restoration, fantasy, glow-ups.", count: 62, color: "#1E9D8B", emoji: "✨" },
+  { slug: "social-media", name: "Social Media", description: "Hooks, captions, carousels, and short-form ideas.", count: 56, color: "#E8883A", emoji: "📱" },
+  { slug: "prompt-packs", name: "Prompt Packs", description: "Grouped prompt bundles for repeatable workflows.", count: 18, color: "#8B5CF6", emoji: "📦" },
+  { slug: "youtube", name: "YouTube", description: "Titles, scripts, thumbnails, retention angles.", count: 32, color: "#E4572E", emoji: "🎬" },
+  { slug: "marketing", name: "Marketing", description: "Ads, offers, funnels, and campaign copy.", count: 28, color: "#D97706", emoji: "📣" },
+  { slug: "design", name: "Design", description: "Creative direction, brand voice, and interface copy.", count: 21, color: "#EC4899", emoji: "🎨" },
+  { slug: "software", name: "Software / Dev", description: "Code reviews, debugging, and engineering prompts.", count: 16, color: "#3B82F6", emoji: "💻" },
+  { slug: "education", name: "Education", description: "Study help, UPSC framing, and structured learning.", count: 14, color: "#F59E0B", emoji: "📚" },
+  { slug: "image-prompts", name: "Image Prompts", description: "Direct prompts for Midjourney, DALL-E, and similar tools.", count: 40, color: "#14B8A6", emoji: "🖼️" },
+  { slug: "productivity", name: "Productivity", description: "Summaries, rewrites, and everyday accelerators.", count: 19, color: "#6366F1", emoji: "⚡" },
+  { slug: "instagram", name: "Instagram", description: "Reels, captions, and carousel copy.", count: 26, color: "#F97316", emoji: "📸" },
+  { slug: "linkedin", name: "LinkedIn", description: "Thought leadership and professional writing.", count: 12, color: "#0EA5E9", emoji: "💼" },
+  { slug: "sql", name: "SQL", description: "Query building and optimization.", count: 8, color: "#0F766E", emoji: "🗄️" },
+  { slug: "business", name: "Business", description: "Research, proposals, and execution docs.", count: 10, color: "#7C3AED", emoji: "📊" },
 ];
 
 export const models: Model[] = [

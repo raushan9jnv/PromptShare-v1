@@ -48,4 +48,10 @@ export const appConfig = {
   admin: {
     bootstrapEmail: "raushan9jnv@gmail.com",
   },
+  features: {
+    // Set to true to allow regular users to submit prompts. Admins can always submit.
+    userSubmit: false,
+    // Set to true to show the blog section in the nav and site.
+    blog: false,
+  },
 } as const;
